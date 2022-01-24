@@ -2,6 +2,13 @@
 from SPARQLWrapper import SPARQLWrapper, JSON, N3, XML
 from rdflib import Graph
 
+'''
+# seleziona tutte le singole entità di tipo Event:
+select distinct ?s from  <http://www.disit.org/km4city/resource/Eventi/Eventi_a_Firenze> where 
+{service <https://servicemap.disit.org/WebAppGrafo/sparql>  {?s a km4c:Event}
+}
+'''
+
 sparql = SPARQLWrapper("https://servicemap.disit.org/WebAppGrafo/sparql")
 sparql.setQuery("""
     PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
