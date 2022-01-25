@@ -3,6 +3,7 @@ from SPARQLWrapper import SPARQLWrapper, JSON, TSV
 sparql = SPARQLWrapper("http://localhost:3030/myFuseki/query")
 
 sparql.setQuery("""
+                PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
                 PREFIX km4c: <http://www.disit.org/km4city/schema#>
                 select distinct ?o from  <http://www.disit.org/km4city/resource/Eventi/Eventi_a_Firenze> where {
                 service <https://servicemap.disit.org/WebAppGrafo/sparql>  {?s ?p ?o  filter (?p != rdf:type)}} order by ?o
