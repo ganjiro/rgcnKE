@@ -1,16 +1,8 @@
-
-from SPARQLWrapper import SPARQLWrapper, JSON, N3, XML
+from SPARQLWrapper import SPARQLWrapper, JSON, TSV
 from rdflib import Graph
 
-'''
-# seleziona tutte le singole entità di tipo Event:
-select distinct ?s from  <http://www.disit.org/km4city/resource/Eventi/Eventi_a_Firenze> where 
-{service <https://servicemap.disit.org/WebAppGrafo/sparql>  {?s a km4c:Event}
-}
-'''
-
-sparql = SPARQLWrapper("https://servicemap.disit.org/WebAppGrafo/sparql")
-sparql.setQuery("""
+sparql = SPARQLWrapper("http://localhost:3030/myFuseki/query")
+sparql.setQuery("""PREFIX km4c: <http://www.disit.org/km4city/schema#>
                   select distinct ?s from  <http://www.disit.org/km4city/resource/Eventi/Eventi_a_Firenze> 
                   where {service <https://servicemap.disit.org/WebAppGrafo/sparql>  {?s a km4c:Event }}
                   
@@ -21,48 +13,32 @@ file = open("testfile.txt","w")
 
 
 for risQuery1_itr in risQuery1["results"]["bindings"]:
-      sparql.setQuery("""
-                select distinct ?p ?o from  
-            <http://www.disit.org/km4city/resource/Eventi/Eventi_a_Firenze> where 
-            {service <https://servicemap.disit.org/WebAppGrafo/sparql>  
-              {<""" + str(risQuery1_itr["s"]["value"]) + """>?p ?o.
-                                                  
-                }
-              }
-            
-      """)
-      sparql.setReturnFormat(JSON)
-      risQuery2 = sparql.query().convert()
-
-      fail = 0
-      for risQuery2_itr in risQuery2["results"]["bindings"]:
-            try:
-                  file.write(str(risQuery1_itr["s"]["value"]) + ' ' + str(risQuery2_itr["p"]["value"]) + ' ' + str(risQuery2_itr["o"]["value"]) + '.\n')
-            except:
-                  fail += 1
-
-            if risQuery2_itr["o"]["type"] != 'uri': continue
-            sparql1 = SPARQLWrapper("https://servicemap.disit.org/WebAppGrafo/sparql")
-            sparql1.setQuery("""
-                      select distinct ?p ?o from  
+      sparql.setQuery("""PREFIX km4c: <http://www.disit.org/km4city/schema#>
+            select distinct ?s ?p ?o from  
                   <http://www.disit.org/km4city/resource/Eventi/Eventi_a_Firenze> where 
-                  {service <https://servicemap.disit.org/WebAppGrafo/sparql>  
-                    {<""" + str(risQuery2_itr["o"]["value"]) + """>?p ?o.
+                  {service <https://servicemap.disit.org/WebAppGrafo/sparql> 
+              
+                    {{?s  ?p ?o.
+                    FILTER(?s = <"""+str(risQuery1_itr["s"]["value"])+""">)
+                      } 
+                      
+                      union  
+                      {?s ?p ?o.
+                       <"""+str(risQuery1_itr["s"]["value"])+""">  ?y ?s.
+                      }     
+                       
+                        union  
+                      {?s ?p ?o.
+                       ?x ?y ?s.
+                       <"""+str(risQuery1_itr["s"]["value"])+""">  ?l ?x.
+                      }     
                       }
-                    }
-            """)
-            sparql1.setReturnFormat(JSON)
-            risQuery3 = sparql1.query().convert()
+                    }         
+      """)
+      sparql.setReturnFormat(TSV)
+      risQuery2 = sparql.query().convert()
+      file.write(risQuery2.decode("UTF-8")[9:-1].replace('\t', ' ').replace('\n', ' .\n'))
 
-            for risQuery3_itr in risQuery3["results"]["bindings"]:
-
-                  try:
-                        file.write(str(risQuery2_itr["o"]["value"]) + ' ' + str(risQuery3_itr["p"]["value"]) + ' ' + str(
-                              risQuery3_itr["o"]["value"]) + '.\n')
-                  except:
-                        fail += 1
-                  if risQuery2_itr["o"]["type"] != 'uri': continue
-      print(fail)
 file.close()
 
 # sparql.setReturnFormat(N3)
