@@ -191,7 +191,7 @@ def _load_data(dataset_str, label_header, nodes_header, dataset_path=None):
     print('Loading dataset', dataset_str)
 
     graph_file = os.path.join(dataset_path, '{}_stripped.nt.gz'.format(dataset_str))
-    task_file = os.path.join(dataset_path, 'km4city_test/completeDataset.tsv')
+    task_file = os.path.join(dataset_path, 'completeDataset.tsv')
     train_file = os.path.join(dataset_path, 'trainingSet.tsv')
     test_file = os.path.join(dataset_path, 'testSet.tsv')
 
@@ -332,10 +332,10 @@ def to_unicode(input):
 
 if __name__ == '__main__':
 
-    label_header = 'test1'
-    nodes_header = 'test'
-    datasets = 'aifb'
+    label_header = 'label'
+    nodes_header = 'nodes'
+    datasets = 'km4c'
 
-    dir = 'C:\\Users\\Girolamo\\PycharmProjects\\rgcnKE\\'+datasets+'\\'
+    dir = 'C:\\Users\\Girolamo\\PycharmProjects\\rgcnKE\\km4city_test\\'
     data = SusDataset(datasets, dir, label_header, nodes_header)
     data.load(3, False)
