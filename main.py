@@ -7,12 +7,12 @@ import torch
 import numpy as np
 
 # load graph data
-# from dgl.contrib.data import load_data
-# data = load_data(dataset='aifb')
+from dgl.contrib.data import load_data
+data = load_data(dataset='aifb')
 datasets = 'aifb'
 curr_dir = str(os.getcwd()) + str('\\') + str(datasets) + str('\\')
 print("we", curr_dir)
-data = ll.load_dataset(label_header='label', nodes_header='nodes', datasets=datasets, dir=curr_dir)
+# data = ll.load_dataset(label_header='label', nodes_header='nodes', datasets=datasets, dir=curr_dir)
 
 num_nodes = data.num_nodes
 num_rels = data.num_rels
