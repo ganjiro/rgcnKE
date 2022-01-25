@@ -13,7 +13,8 @@ file = open("testfile.txt","w")
 
 
 for risQuery1_itr in risQuery1["results"]["bindings"]:
-      sparql.setQuery("""PREFIX km4c: <http://www.disit.org/km4city/schema#>
+      sparql.setQuery("""
+            PREFIX km4c: <http://www.disit.org/km4city/schema#>
             select distinct ?s ?p ?o from  
                   <http://www.disit.org/km4city/resource/Eventi/Eventi_a_Firenze> where 
                   {service <https://servicemap.disit.org/WebAppGrafo/sparql> 
@@ -37,7 +38,12 @@ for risQuery1_itr in risQuery1["results"]["bindings"]:
       """)
       sparql.setReturnFormat(TSV)
       risQuery2 = sparql.query().convert()
-      file.write(risQuery2.decode("UTF-8")[9:-1].replace('\t', ' ').replace('\n', ' .\n'))
+
+      # file.write(risQuery2.decode("UTF-8")[9:-1].replace('>\t<', '> <').replace('\n', ' .\n'))  #NT
+      # file.write(' .\n')
+
+      file.write(risQuery2.decode("UTF-8")[9:-1])  #TSV
+      file.write('\n')
 
 file.close()
 
