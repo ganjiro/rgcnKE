@@ -100,14 +100,6 @@ class susSDataset(RDFGraphDataset):
         _, rock, label = line.strip().split('\t')
         return rock, label
 
-    def download(self):
-        r""" Automatically download data and extract it.
-        """
-        zip_file_path = os.path.join(self.raw_dir, self.name + '.tar.gz')
-        wget.download(self.url, zip_file_path)
-        extract_archive(zip_file_path, self.raw_path)
-
-
 class SusDataset(object):
 
     def __init__(self, name, dir, label_header, nodes_header):
@@ -180,7 +172,7 @@ def _load_data(dataset_str, label_header, nodes_header, dataset_path=None):
     print('Loading dataset', dataset_str)
 
     graph_file = os.path.join(dataset_path, '{}_stripped.nt.gz'.format(dataset_str))
-    task_file = os.path.join(dataset_path, 'km4city_test/completeDataset.tsv')
+    task_file = os.path.join(dataset_path, 'completeDataset.tsv')
     train_file = os.path.join(dataset_path, 'trainingSet.tsv')
     test_file = os.path.join(dataset_path, 'testSet.tsv')
 

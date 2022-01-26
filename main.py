@@ -9,8 +9,9 @@ import numpy as np
 # load graph data
 # from dgl.contrib.data import load_data
 # data = load_data(dataset='aifb')
-datasets = 'aifb'
-curr_dir = str(os.getcwd()) + str('\\') + str(datasets) + str('\\')
+datasets = 'km4c'
+# curr_dir = str(os.getcwd()) + str('\\') + "km4city_test" + str('\\')
+curr_dir = str(os.getcwd())+'\\km4city_test\\'
 # print("current dir: ", curr_dir)
 data = ll.load_dataset(label_header='label', nodes_header='nodes', datasets=datasets, dir=curr_dir)
 
@@ -37,7 +38,7 @@ labels = torch.from_numpy(labels).view(-1)
 n_hidden = 16  # number of hidden units
 n_bases = -1  # use number of relations as number of bases
 n_hidden_layers = 0  # use 1 input layer, 1 output layer, no hidden layer
-n_epochs = 25  # epochs to train
+n_epochs = 100000  # epochs to train
 lr = 0.01  # learning rate
 l2norm = 0  # L2 norm coefficient
 
@@ -46,7 +47,7 @@ g = dgl.graph((data.edge_src, data.edge_dst))
 g.edata.update({'rel_type': edge_type, 'norm': edge_norm})
 
 # XXX LONG num_nodes, len(g), g.number_of_nodes
-model = Model(8285,
+model = Model(60373,
               n_hidden,
               num_classes,
               num_rels,
