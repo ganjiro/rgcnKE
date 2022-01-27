@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import csv
 
-df = pd.read_csv("testfile.txt", sep='\t', encoding='ISO-8859-1')
+df = pd.read_csv("../subgraph_data.tsv.txt", sep='\t', encoding='ISO-8859-1')
 
 df = df.drop_duplicates()
 df1 = df.query('p != "<http://www.disit.org/km4city/schema#eventCategory>"')

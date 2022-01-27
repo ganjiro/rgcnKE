@@ -9,6 +9,7 @@ from dgl.data.utils import _get_dgl_url, extract_archive, get_download_dir
 import rdflib as rdf
 import wget
 
+
 class susSDataset(RDFGraphDataset):
     def __init__(self,
                  print_every=10000,
@@ -22,12 +23,11 @@ class susSDataset(RDFGraphDataset):
         predict_category = 'Hyponym'
         self.hyponym = rdf.term.URIRef("_hyponym")
         super(susSDataset, self).__init__(name, url, predict_category,
-                                         print_every=print_every,
-                                         insert_reverse=insert_reverse,
-                                         raw_dir=raw_dir,
-                                         force_reload=force_reload,
-                                         verbose=verbose)
-
+                                          print_every=print_every,
+                                          insert_reverse=insert_reverse,
+                                          raw_dir=raw_dir,
+                                          force_reload=force_reload,
+                                          verbose=verbose)
 
     def __getitem__(self, idx):
         r"""Gets the graph object
@@ -49,7 +49,6 @@ class susSDataset(RDFGraphDataset):
         """
         return super(susSDataset, self).__getitem__(idx)
 
-
     def __len__(self):
         r"""The number of graphs in the dataset.
 
@@ -58,7 +57,6 @@ class susSDataset(RDFGraphDataset):
         int
         """
         return super(susSDataset, self).__len__()
-
 
     def parse_entity(self, term):
         if isinstance(term, rdf.Literal):
@@ -79,7 +77,6 @@ class susSDataset(RDFGraphDataset):
         else:
             return None
 
-
     def parse_relation(self, term):
         if term == self.hyponym:
             return None
@@ -95,12 +92,10 @@ class susSDataset(RDFGraphDataset):
             relstr = relstr.replace('.', '_')
             return Relation(cls=relstr)
 
-
     def process_tuple(self, raw_tuple, sbj, rel, obj):
         if sbj is None or rel is None or obj is None:
             return None
         return (sbj, rel, obj)
-
 
     def process_idx_file_line(self, line):
         _, rock, label = line.strip().split('\t')
@@ -114,11 +109,6 @@ class susSDataset(RDFGraphDataset):
         extract_archive(zip_file_path, self.raw_path)
 
 
-
-
-
-
-
 class SusDataset(object):
 
     def __init__(self, name, dir, label_header, nodes_header):
@@ -127,14 +117,15 @@ class SusDataset(object):
         self.label_header = label_header
         self.nodes_header = nodes_header
 
-        #tgz_path = os.path.join(self.dir, '{}.tgz'.format(self.name))
-        #download(_downlaod_prefix + '{}.tgz'.format(self.name), tgz_path)
-        #self.dir = os.path.join(self.dir, self.name)
-        #extract_archive(tgz_path, self.dir)
+        # tgz_path = os.path.join(self.dir, '{}.tgz'.format(self.name))
+        # download(_downlaod_prefix + '{}.tgz'.format(self.name), tgz_path)
+        # self.dir = os.path.join(self.dir, self.name)
+        # extract_archive(tgz_path, self.dir)
 
     def load(self, bfs_level=2, relabel=False):
 
-        self.num_nodes, edges, self.num_rels, self.labels, labeled_nodes_idx, self.train_idx, self.test_idx = _load_data(self.name,self.label_header, self.nodes_header, self.dir)
+        self.num_nodes, edges, self.num_rels, self.labels, labeled_nodes_idx, self.train_idx, self.test_idx = _load_data(
+            self.name, self.label_header, self.nodes_header, self.dir)
 
         # bfs to reduce edges
         if bfs_level > 0:
@@ -167,14 +158,14 @@ class SusDataset(object):
             self.edge_src, self.edge_dst, self.edge_type = edges.transpose()
 
         # normalize by dst degree
-        _, inverse_index, count = np.unique((self.edge_dst, self.edge_type), axis=1, return_inverse=True, return_counts=True)
+        _, inverse_index, count = np.unique((self.edge_dst, self.edge_type), axis=1, return_inverse=True,
+                                            return_counts=True)
         degrees = count[inverse_index]
         self.edge_norm = np.ones(len(self.edge_dst), dtype=np.float32) / degrees.astype(np.float32)
 
         # convert to pytorch label format
         self.num_classes = self.labels.shape[1]
         self.labels = np.argmax(self.labels, axis=1)
-
 
 
 def _load_data(dataset_str, label_header, nodes_header, dataset_path=None):
@@ -237,7 +228,7 @@ def _load_data(dataset_str, label_header, nodes_header, dataset_path=None):
             nodes = list(subjects.union(objects))
             num_node = len(nodes)
             num_rel = len(relations)
-            num_rel = 2 * num_rel + 1 # +1 is for self-relation
+            num_rel = 2 * num_rel + 1  # +1 is for self-relation
 
             assert num_node < np.iinfo(np.int32).max
             print('Number of nodes: ', num_node)
@@ -322,7 +313,6 @@ def _load_data(dataset_str, label_header, nodes_header, dataset_path=None):
         np.save(train_idx_file, train_idx)
         np.save(test_idx_file, test_idx)
 
-
     return num_node, edge_list, num_rel, labels, labeled_nodes_idx, train_idx, test_idx
 
 
@@ -330,8 +320,8 @@ def to_unicode(input):
     # FIXME (lingfan): not sure about python 2 and 3 str compatibility
     return str(input)
 
-if __name__ == '__main__':
 
+if __name__ == '__main__':
     label_header = 'label'
     nodes_header = 'nodes'
     datasets = 'km4c'

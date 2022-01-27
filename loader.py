@@ -1,12 +1,10 @@
 import os
 import numpy as np
 import pandas as pd
+import rdflib as rdf
 import scipy.sparse as sp
 from dgl.contrib.data.knowledge_graph import _save_sparse_csr, RDFReader, _load_sparse_csr, _bfs_relational
 from dgl.data.rdf import RDFGraphDataset, Entity, Relation
-from dgl.data.utils import _get_dgl_url, extract_archive, get_download_dir
-import rdflib as rdf
-import wget
 
 
 class susSDataset(RDFGraphDataset):
@@ -99,6 +97,7 @@ class susSDataset(RDFGraphDataset):
     def process_idx_file_line(self, line):
         _, rock, label = line.strip().split('\t')
         return rock, label
+
 
 class SusDataset(object):
 
@@ -320,8 +319,9 @@ def load_dataset(label_header, nodes_header, datasets, dir, bfs_level=3):
 if __name__ == '__main__':
     label_header = 'label'
     nodes_header = 'nodes'
-    datasets = 'aifb'
+    datasets = 'km4c'
+    curr_dir = str(os.getcwd()) + '\\km4city\\'
+    n_hop = 3  # di default pari a 2
 
-    dir = 'C:\\Users\\mistr\\OneDrive\\Desktop\\pythonProject\\GNNforRDFs\\' + datasets + '\\'
-    data = SusDataset(datasets, dir, label_header, nodes_header)
-    data.load(3, False)
+    data = SusDataset(datasets, curr_dir, label_header, nodes_header)
+    data.load(n_hop)

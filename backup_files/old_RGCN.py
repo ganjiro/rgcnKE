@@ -1,11 +1,11 @@
 from functools import partial
-from layer import *
+from gnn.layer import *
 import torch.nn.functional as F
 
-class Model(nn.Module):
+class RGCN(nn.Module):
     def __init__(self, num_nodes, h_dim, out_dim, num_rels,
                  num_bases=-1, num_hidden_layers=1):
-        super(Model, self).__init__()
+        super(RGCN, self).__init__()
         self.num_nodes = num_nodes
         self.h_dim = h_dim
         self.out_dim = out_dim
