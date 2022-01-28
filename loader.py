@@ -20,6 +20,7 @@ class DatasetLoader(object):
         # bfs to reduce edges
         if bfs_level > 0:
             print("removing nodes that are more than {} hops away".format(bfs_level))
+            print()
             row, col, edge_type = edges.transpose()
             A = sp.csr_matrix((np.ones(len(row)), (row, col)), shape=(self.num_nodes, self.num_nodes))
             bfs_generator = _bfs_relational(A, labeled_nodes_idx)
@@ -59,7 +60,7 @@ class DatasetLoader(object):
 
     def _load_data(self, dataset_str, label_header, nodes_header, dataset_path=None):
 
-        print('Loading dataset', dataset_str)
+        print('******* Loading dataset', dataset_str, "***********************")
 
         graph_file = os.path.join(dataset_path, '{}_stripped.nt.gz'.format(dataset_str))
         task_file = os.path.join(dataset_path, 'completeDataset.tsv')

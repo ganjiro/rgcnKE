@@ -12,19 +12,25 @@ class Model(nn.Module):
         self.num_hidden_layers = num_hidden_layers
         self.num_bases = num_bases
         self.n_epochs = n_epochs
-
+        # ----
+        self.lr = lr
+        self.l2norm = l2norm
+        # ----
         self.out_dim = None
         self.num_nodes = None
         self.num_rels = None
         # ----
+        self.labels = None
         self.val_idx = None
         self.train_idx = None
         self.test_idx = None
         # ----
         self.graph = self.prepare_graph()
         self.RGCN = RGCN(num_nodes=self.num_nodes, h_dim=self.h_dim, out_dim=self.out_dim, num_rels=self.num_rels,
-                             num_bases=self.num_bases, num_hidden_layers=self.num_hidden_layers)
+                         num_bases=self.num_bases, num_hidden_layers=self.num_hidden_layers)
         self.optimizer = torch.optim.Adam(self.RGCN.parameters(), lr=lr, weight_decay=l2norm)
+
+        self._print_parameters()
 
     def prepare_graph(self):
         num_nodes = self.data.num_nodes
@@ -33,6 +39,7 @@ class Model(nn.Module):
         self.labels = self.data.labels
         self.train_idx = self.data.train_idx
         # split training and validation set
+        # andrà modificato se aggiungiamo il parametro test_size
         self.val_idx = self.train_idx[:len(self.train_idx) // 5]
         self.train_idx = self.train_idx[len(self.train_idx) // 5:]
         # added
@@ -94,3 +101,16 @@ class Model(nn.Module):
 
         print("Mean forward time: {:4f}".format(np.mean(forward_time[len(forward_time) // 4:])))
         print("Mean backward time: {:4f}".format(np.mean(backward_time[len(backward_time) // 4:])))
+
+    def _print_parameters(self):
+        print(
+            "\n\n******* Launching RGCN-Model Node Classifier ****************************************************************************************************************")
+        # print("Dataset:", self.dataset_name)
+
+        print("Embeddings dim:", self.h_dim)
+        print("Number of hidden layers:", self.num_hidden_layers)
+        print("Number of bases:", self.num_bases)
+        print("Number of epochs:", self.n_epochs)
+        print("Learning rate:", self.lr)
+        print("L2norm:", self.l2norm)
+        print()

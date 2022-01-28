@@ -15,22 +15,22 @@ class RGCNLayer(nn.Module):
         self.activation = activation
         self.is_input_layer = is_input_layer
 
-        # sanity check
+        # input check
         if self.num_bases <= 0 or self.num_bases > self.num_rels:
             self.num_bases = self.num_rels
 
-        # weight bases in equation (3)
+        # inizializzazione dei pesi
         self.weight = nn.Parameter(torch.Tensor(self.num_bases, self.in_feat,
                                                 self.out_feat))
         if self.num_bases < self.num_rels:
-            # linear combination coefficients in equation (3)
+            # combinazione lineare dei coefficienti
             self.w_comp = nn.Parameter(torch.Tensor(self.num_rels, self.num_bases))
 
         # add bias
         if self.bias:
             self.bias = nn.Parameter(torch.Tensor(out_feat))
 
-        # init trainable parameters
+        # inizializzazione trainable parameters
         nn.init.xavier_uniform_(self.weight,
                                 gain=nn.init.calculate_gain('relu'))
         if self.num_bases < self.num_rels:
@@ -42,7 +42,7 @@ class RGCNLayer(nn.Module):
 
     def forward(self, g):
         if self.num_bases < self.num_rels:
-            # generate all weights from bases (equation (3))
+            # aggiornamento dei pesi
             weight = self.weight.view(self.in_feat, self.num_bases, self.out_feat)
             weight = torch.matmul(self.w_comp, weight).view(self.num_rels,
                                                             self.in_feat, self.out_feat)
@@ -51,8 +51,6 @@ class RGCNLayer(nn.Module):
 
         if self.is_input_layer:
             def message_func(edges):
-                # for input layer, matrix multiply can be converted to be
-                # an embedding lookup using source node id
                 embed = weight.view(-1, self.out_feat)
                 index = edges.data['rel_type'] * self.in_feat + edges.src['id']
                 return {'msg': embed[index] * edges.data['norm']}
