@@ -1,11 +1,7 @@
 import time
-
 import dgl
 import numpy as np
-import torch.nn.functional as F
-
-from gnn.layer import *
-from trash.old_RGCN import old_RGCN
+from gnn.rgcn import *
 
 
 class Model(nn.Module):
@@ -26,7 +22,7 @@ class Model(nn.Module):
         self.test_idx = None
         # ----
         self.graph = self.prepare_graph()
-        self.RGCN = old_RGCN(num_nodes=self.num_nodes, h_dim=self.h_dim, out_dim=self.out_dim, num_rels=self.num_rels,
+        self.RGCN = RGCN(num_nodes=self.num_nodes, h_dim=self.h_dim, out_dim=self.out_dim, num_rels=self.num_rels,
                              num_bases=self.num_bases, num_hidden_layers=self.num_hidden_layers)
         self.optimizer = torch.optim.Adam(self.RGCN.parameters(), lr=lr, weight_decay=l2norm)
 
