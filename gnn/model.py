@@ -5,7 +5,7 @@ from gnn.rgcn import *
 
 
 class Model(nn.Module):
-    def __init__(self, data, h_dim, num_hidden_layers=0, num_bases=-1, n_epochs=30, lr=0.01, l2norm=0):
+    def __init__(self, data, h_dim, num_hidden_layers=1, num_bases=51, n_epochs=1000, lr=0.01, l2norm=0.00005):
         super(Model, self).__init__()
         self.data = data
         self.h_dim = h_dim
@@ -45,7 +45,7 @@ class Model(nn.Module):
         # create graph
         g = dgl.graph((self.data.edge_src, self.data.edge_dst))
         g.edata.update({'rel_type': edge_type, 'norm': edge_norm})
-        self.num_nodes = 60373  # TODO FIX
+        self.num_nodes = g.number_of_nodes()
         return g
 
     def fit(self, want_accuracy=True):
