@@ -1,7 +1,7 @@
 import os
 import loader as ll
 from gnn.model import *
-
+# fix
 # XXX old method used to load data from server
 # load graph data
 # from dgl.contrib.data import load_data
