@@ -1,5 +1,5 @@
 from functools import partial
-from gnn.layer import *
+from gnn.node_classification.layer import *
 import torch.nn.functional as F
 
 

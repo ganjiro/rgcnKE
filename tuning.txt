@@ -5,9 +5,15 @@ epochs = 10000
 l2norm = 5e-4
 lr = 0.04
 num_bases = -1
-model = Model(data=data, h_dim=n_hidden, num_hidden_layers=num_hidden_layers, n_epochs=epochs, l2norm=l2norm,
-              lr=lr, num_bases=num_bases)
-
 Epoch 00281 | Train Forward Time(s) 0.2553 | Backward Time(s) 0.9476
 Train Accuracy: 0.8590 | Train Loss: 2.4731 | Validation Accuracy: 0.6702 | Validation loss: 2.7102
+
 ******************
+n_hidden = 10
+num_hidden_layers = 1
+epochs = 10000
+l2norm = 5e-4
+lr = 0.06
+num_bases = -1
+Epoch 00294 | Train Forward Time(s) 0.3416 | Backward Time(s) 1.3394
+Train Accuracy: 0.7820 | Train Loss: 2.5402 | Validation Accuracy: 0.6450 | Validation loss: 2.7118

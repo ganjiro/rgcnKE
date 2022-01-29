@@ -5,7 +5,6 @@ import scipy.sparse as sp
 from dgl.contrib.data.knowledge_graph import _save_sparse_csr, RDFReader, _load_sparse_csr, _bfs_relational
 
 
-
 class LinkDatasetLoader(object):
 
     def __init__(self, name, directory):
@@ -29,6 +28,7 @@ class LinkDatasetLoader(object):
         print("# relations: {}".format(self.num_rels))
         print("# edges: {}".format(len(self.train)))
 
+
 def _read_dictionary(filename):
     d = {}
     with open(filename, 'r+') as f:
@@ -37,11 +37,13 @@ def _read_dictionary(filename):
             d[line[1]] = int(line[0])
     return d
 
+
 def _read_triplets(filename):
     with open(filename, 'r+') as f:
         for line in f:
             processed_line = line.strip().split('\t')
             yield processed_line
+
 
 def _read_triplets_as_list(filename, entity_dict, relation_dict):
     l = []
@@ -51,6 +53,7 @@ def _read_triplets_as_list(filename, entity_dict, relation_dict):
         o = entity_dict[triplet[2]]
         l.append([s, r, o])
     return l
+
 
 class DatasetLoader(object):
 
@@ -252,6 +255,7 @@ def load_dataset(label_header, nodes_header, datasets, dir, bfs_level=3):
     data.load(bfs_level, False)
     return data
 
+
 def load_link_dataset(datasets, dir):
     data = LinkDatasetLoader(datasets, dir)
     data.load()
@@ -267,6 +271,3 @@ if __name__ == '__main__':
 
     data = DatasetLoader(datasets, curr_dir, label_header, nodes_header)
     data.load(n_hop)
-
-
-

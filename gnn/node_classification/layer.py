@@ -1,6 +1,6 @@
-import torch
-import torch.nn as nn
-import dgl.function as fn
+from functools import partial
+from gnn.node_classification.layer import *
+import torch.nn.functional as F
 
 
 class RGCNLayer(nn.Module):

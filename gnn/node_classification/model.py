@@ -1,7 +1,7 @@
 import time
 import dgl
 import numpy as np
-from gnn.rgcn import *
+from gnn.node_classification.rgcn import *
 
 
 class Model(nn.Module):
