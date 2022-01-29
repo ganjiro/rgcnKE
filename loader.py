@@ -5,6 +5,53 @@ import scipy.sparse as sp
 from dgl.contrib.data.knowledge_graph import _save_sparse_csr, RDFReader, _load_sparse_csr, _bfs_relational
 
 
+
+class LinkDatasetLoader(object):
+
+    def __init__(self, name, directory):
+        self.name = name
+        self.dir = directory
+
+    def load(self):
+        entity_path = os.path.join(self.dir, 'entities.dict')
+        relation_path = os.path.join(self.dir, 'relations.dict')
+        train_path = os.path.join(self.dir, 'train.txt')
+        valid_path = os.path.join(self.dir, 'valid.txt')
+        test_path = os.path.join(self.dir, 'test.txt')
+        entity_dict = _read_dictionary(entity_path)
+        relation_dict = _read_dictionary(relation_path)
+        self.train = np.asarray(_read_triplets_as_list(train_path, entity_dict, relation_dict))
+        self.valid = np.asarray(_read_triplets_as_list(valid_path, entity_dict, relation_dict))
+        self.test = np.asarray(_read_triplets_as_list(test_path, entity_dict, relation_dict))
+        self.num_nodes = len(entity_dict)
+        print("# entities: {}".format(self.num_nodes))
+        self.num_rels = len(relation_dict)
+        print("# relations: {}".format(self.num_rels))
+        print("# edges: {}".format(len(self.train)))
+
+def _read_dictionary(filename):
+    d = {}
+    with open(filename, 'r+') as f:
+        for line in f:
+            line = line.strip().split('\t')
+            d[line[1]] = int(line[0])
+    return d
+
+def _read_triplets(filename):
+    with open(filename, 'r+') as f:
+        for line in f:
+            processed_line = line.strip().split('\t')
+            yield processed_line
+
+def _read_triplets_as_list(filename, entity_dict, relation_dict):
+    l = []
+    for triplet in _read_triplets(filename):
+        s = entity_dict[triplet[0]]
+        r = relation_dict[triplet[1]]
+        o = entity_dict[triplet[2]]
+        l.append([s, r, o])
+    return l
+
 class DatasetLoader(object):
 
     def __init__(self, name, dir, label_header, nodes_header):
@@ -205,6 +252,11 @@ def load_dataset(label_header, nodes_header, datasets, dir, bfs_level=3):
     data.load(bfs_level, False)
     return data
 
+def load_link_dataset(datasets, dir):
+    data = LinkDatasetLoader(datasets, dir)
+    data.load()
+    return data
+
 
 if __name__ == '__main__':
     label_header = 'label'
@@ -215,3 +267,6 @@ if __name__ == '__main__':
 
     data = DatasetLoader(datasets, curr_dir, label_header, nodes_header)
     data.load(n_hop)
+
+
+
