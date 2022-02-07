@@ -7,6 +7,7 @@ from gnn.node_classification.model import *
 # from dgl.contrib.data import load_data
 # data = load_data(dataset='aifb')
 
+# TODO RANDOM SPLIT DATASET
 datasets = 'km4c'
 curr_dir = str(os.getcwd()) + "\\km4city\\"
 data = ll.load_dataset(label_header='label', nodes_header='nodes', datasets=datasets, dir=curr_dir)
@@ -14,7 +15,7 @@ data = ll.load_dataset(label_header='label', nodes_header='nodes', datasets=data
 # parametri
 n_hidden = 16
 num_hidden_layers = 1
-epochs = 10000
+epochs = 2
 l2norm = 0.0005
 lr = 0.01
 num_bases = 28

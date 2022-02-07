@@ -33,7 +33,7 @@ class Model(nn.Module):
         self._print_parameters()
 
     def prepare_graph(self):
-        num_nodes = self.data.num_nodes
+        # num_nodes = self.data.num_nodes
         self.num_rels = self.data.num_rels
         self.out_dim = self.data.num_classes
         self.labels = self.data.labels
@@ -92,7 +92,10 @@ class Model(nn.Module):
 
     def print_accuracy(self, forward_time, backward_time):
         self.eval()
-        logits = self.RGCN.forward(self.graph)
+        print("labels", self.labels[:5])  # 60'000
+        logits = self.RGCN.forward(self.graph)  # 60'000*26 per ogni classe
+        print("logits", sum(logits[0]))
+        # self.test_idx 9533 la classe predetta per ogni elemento del test
         test_loss = F.cross_entropy(logits[self.test_idx], self.labels[self.test_idx].long())
         test_acc = torch.sum(logits[self.test_idx].argmax(dim=1) == self.labels[self.test_idx]).item() / len(
             self.test_idx)
@@ -114,3 +117,4 @@ class Model(nn.Module):
         print("Learning rate:", self.lr)
         print("L2norm:", self.l2norm)
         print()
+
