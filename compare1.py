@@ -12,7 +12,7 @@ from tree_builder import MINDWALCTree, MINDWALCForest, MINDWALCTransform
 from datastructures import Graph
 
 
-rdf_file = 'km4city/km4c_stripped.nt'
+rdf_file = 'km4city/km_il_vero_file.nt'
 _format = 'nt'
 train_file = 'km4city/trainingSet.tsv'
 test_file = 'km4city/testSet.tsv'
