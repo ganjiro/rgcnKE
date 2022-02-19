@@ -64,7 +64,7 @@ class DatasetLoader(object):
         self.nodes_header = nodes_header
 
     def load(self, bfs_level=2, relabel=False):
-        self.num_nodes, edges, self.num_rels, self.labels, labeled_nodes_idx, self.train_idx, self.test_idx = self._load_data(
+        self.label_dict, self.num_nodes, edges, self.num_rels, self.labels, labeled_nodes_idx, self.train_idx, self.test_idx = self._load_data(
             self.name, self.label_header, self.nodes_header, self.dir)
 
         # bfs to reduce edges
@@ -121,9 +121,10 @@ class DatasetLoader(object):
         labels_file = os.path.join(dataset_path, 'labels.npz')
         train_idx_file = os.path.join(dataset_path, 'train_idx.npy')
         test_idx_file = os.path.join(dataset_path, 'test_idx.npy')
+        labels_out_path = os.path.join(dataset_path, 'labels_out.npy')
 
         if os.path.isfile(edge_file) and os.path.isfile(labels_file) and \
-                os.path.isfile(train_idx_file) and os.path.isfile(test_idx_file):
+                os.path.isfile(train_idx_file) and os.path.isfile(test_idx_file) and os.path.isfile(labels_out_path):
 
             # load precomputed adjacency matrix and labels
             all_edges = np.load(edge_file)
@@ -142,6 +143,7 @@ class DatasetLoader(object):
 
             train_idx = np.load(train_idx_file)
             test_idx = np.load(test_idx_file)
+            labels_out = np.load(labels_out_path, allow_pickle=True)[()]
 
         else:
 
@@ -195,6 +197,7 @@ class DatasetLoader(object):
 
             labels_set = set(labels_df[label_header].values.tolist())
             labels_dict = {lab: i for i, lab in enumerate(list(labels_set))}
+            labels_out = {i: lab for i, lab in enumerate(list(labels_set))}
 
             print('{} classes: {}'.format(len(labels_set), labels_set))
 
@@ -243,8 +246,9 @@ class DatasetLoader(object):
 
             np.save(train_idx_file, train_idx)
             np.save(test_idx_file, test_idx)
+            np.save(labels_out_path, labels_out)
 
-        return num_node, edge_list, num_rel, labels, labeled_nodes_idx, train_idx, test_idx
+        return labels_out, num_node, edge_list, num_rel, labels, labeled_nodes_idx, train_idx, test_idx
 
     def to_unicode(self, input):
         return str(input)
