@@ -1,0 +1,7 @@
+n_hidden = 16
+    def __init__(self, data, h_dim, num_hidden_layers=1, num_bases=28, n_epochs=1000, lr=0.01, l2norm=0.0005):
+
+Epoch 00221 | Train Forward Time(s) 0.3846 | Backward Time(s) 1.4257
+Train Accuracy: 0.9271 | Train Loss: 2.3986 | Validation Accuracy: 0.7038 | Validation loss: 2.6535
+
+Train Accuracy: 0.9240 | Train Loss: 2.3993 | Validation Accuracy: 0.7080 | Validation loss: 2.6490
