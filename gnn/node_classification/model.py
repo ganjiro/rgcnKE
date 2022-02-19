@@ -118,3 +118,7 @@ class Model(nn.Module):
         print("L2norm:", self.l2norm)
         print()
 
+    def _predict(self):
+        # TODO salvare
+        pass
+

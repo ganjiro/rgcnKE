@@ -58,4 +58,4 @@ def download_km4c(file_path="../subgraph_data.tsv", sparql_endpoint="http://loca
 
 
 if __name__ == '__main__':
-    download_km4c(file_path="../mio_subgraph_data.nt", want_tsv=False)
+    download_km4c(file_path="../dataset/mio_subgraph_data.nt", want_tsv=False)
