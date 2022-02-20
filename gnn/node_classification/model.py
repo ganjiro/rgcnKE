@@ -2,6 +2,7 @@ import time
 import dgl
 import numpy as np
 from gnn.node_classification.rgcn import *
+import torch
 
 
 class Model(nn.Module):
@@ -24,6 +25,9 @@ class Model(nn.Module):
         self.val_idx = None
         self.train_idx = None
         self.test_idx = None
+
+        self.labels_dict = None  # XXX NUOVA AGGIUNTA predict
+
         # ----
         self.graph = self.prepare_graph()
         self.RGCN = RGCN(num_nodes=self.num_nodes, h_dim=self.h_dim, out_dim=self.out_dim, num_rels=self.num_rels,
@@ -33,6 +37,8 @@ class Model(nn.Module):
         self._print_parameters()
 
     def prepare_graph(self):
+        self.labels_dict = self.data.label_dict  # XXX NUOVA AGGIUNTA predict
+
         # num_nodes = self.data.num_nodes
         self.num_rels = self.data.num_rels
         self.out_dim = self.data.num_classes
@@ -92,9 +98,9 @@ class Model(nn.Module):
 
     def print_accuracy(self, forward_time, backward_time):
         self.eval()
-        print("labels", self.labels[:5])  # 60'000
+        # print("labels", self.labels[:5])  # 60'000
         logits = self.RGCN.forward(self.graph)  # 60'000*26 per ogni classe
-        print("logits", sum(logits[0]))
+        # print("logits", sum(logits[0]))
         # self.test_idx 9533 la classe predetta per ogni elemento del test
         test_loss = F.cross_entropy(logits[self.test_idx], self.labels[self.test_idx].long())
         test_acc = torch.sum(logits[self.test_idx].argmax(dim=1) == self.labels[self.test_idx]).item() / len(
@@ -118,7 +124,52 @@ class Model(nn.Module):
         print("L2norm:", self.l2norm)
         print()
 
-    def _predict(self):
-        # TODO salvare
-        pass
+    def predict(self):
+        self.eval()
+        # print("labels", self.labels[:5])  # 60'000
+        logits = self.RGCN.forward(self.graph)  # 60'000*26 per ogni classe
+        # print("logits", sum(logits[0]))
+        # self.test_idx 9533 la classe predetta per ogni elemento del test
 
+        # print(self.labels[self.test_idx[0]].item())
+        # TODO SALVA IN UN CSV
+        print("Entità   Classe-Reale    Classe-Predetta")
+        for i in range(len(self.test_idx)):
+            print("E" + str(self.test_idx[i]) + ":  " + str(self.labels_dict[self.labels[self.test_idx[i]].item()]) +
+                  " " + str(self.labels_dict[torch.argmax(logits[self.test_idx[i]]).item()]))
+
+        # test_loss = F.cross_entropy(logits[self.test_idx], self.labels[self.test_idx].long())
+        # test_acc = torch.sum(logits[self.test_idx].argmax(dim=1) == self.labels[self.test_idx]).item() / len(
+        #     self.test_idx)
+        # print("Test Accuracy: {:.4f} | Test loss: {:.4f}".format(test_acc, test_loss.item()))
+        # print()
+        #
+        # print("Mean forward time: {:4f}".format(np.mean(forward_time[len(forward_time) // 4:])))
+        # print("Mean backward time: {:4f}".format(np.mean(backward_time[len(backward_time) // 4:])))
+
+        print()
+
+    def predict_single(self, entities_vector):
+        if self.check_entities_vector(entities_vector):
+            self.eval()
+
+            logits = self.RGCN.forward(self.graph)  # 60'000*26 per ogni classe
+
+            test_idx = entities_vector
+            print("Entità   Classe-Reale    Classe-Predetta")
+            for i in range(len(test_idx)):
+                print(
+                    "E" + str(test_idx[i]) + ":  " + str(self.labels_dict[self.labels[test_idx[i]].item()]) +
+                    " " + str(self.labels_dict[torch.argmax(logits[test_idx[i]]).item()]))
+        else:
+            print("La lista di entità da esaminare richiesta non è totalmente compresa nel datatest")
+            print()
+
+    def check_entities_vector(self, entities_vector):
+        # TODO CHECK with list comprehension
+        ret = True
+        for i in entities_vector:
+            if i not in self.test_idx:
+                ret = False
+                break
+        return ret

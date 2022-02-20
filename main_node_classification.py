@@ -25,4 +25,9 @@ model = Model(data=data, h_dim=n_hidden, num_hidden_layers=num_hidden_layers, n_
 
 model.fit()
 
+model.predict()
+
+entities_vector = [1, 2, 3]
+model.predict_single(entities_vector)
+
 # TODO booleano che elimina: edges, labels, test_idx, train_idx

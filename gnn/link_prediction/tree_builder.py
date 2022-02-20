@@ -1,4 +1,4 @@
-from gnn.link_prediction.datastructures import *
+import gnn.link_prediction.datastructures as ds
 from sklearn.base import ClassifierMixin, TransformerMixin, BaseEstimator
 from collections import Counter
 import copy
