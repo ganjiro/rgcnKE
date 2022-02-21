@@ -1,4 +1,7 @@
-import os
+# TODO cambiare EXXX con l'URI e abbiamo finito
+# TODO salvare le predizioni
+# TODO tuning
+
 import manage_dataset.loader as ll
 from gnn.node_classification.model import *
 from manage_dataset.splidataset import *
@@ -12,7 +15,7 @@ from manage_dataset.splidataset import *
 datasets = 'km4c'
 curr_dir = str(os.getcwd()) + "\\dataset\\km4city\\dataset_for_node_classification\\classification"
 
-split_dataset(test_size=0.5, path=curr_dir)
+split_dataset(test_size=0.2, path=curr_dir)
 data = ll.load_dataset(label_header='label', nodes_header='nodes', datasets=datasets, dir=curr_dir)
 
 # parametri
@@ -30,8 +33,7 @@ model.fit()
 
 model.predict()
 
+tmp = [18423, 27164, 9748, 27164, 31633]
 for i in range(5):
-    aaa = [18423,27164,9748,27164,31633]
-    entities_vector = [aaa[i]]
+    entities_vector = [tmp[i]]
     model.predict_single(entities_vector)
-

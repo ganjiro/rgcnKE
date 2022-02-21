@@ -1,10 +1,12 @@
-import comparing_model.node_classification_MINDWALC.datastructures as ds
-from sklearn.base import ClassifierMixin, TransformerMixin, BaseEstimator
 from collections import Counter
+
 import numpy as np
-from scipy.stats import entropy
-import ray
 import psutil
+import ray
+from scipy.stats import entropy
+from sklearn.base import ClassifierMixin, TransformerMixin, BaseEstimator
+
+import comparing_model.node_classification_MINDWALC.datastructures as ds
 
 
 @ray.remote
@@ -145,6 +147,9 @@ class MINDWALCMixin():
 
 
 class MINDWALCTree(BaseEstimator, ClassifierMixin, MINDWALCMixin):
+    # TODO ATTENZIONE ho cambiato robe
+    # path_max_depth=8
+    # n_jobs=1
     def __init__(self, path_max_depth=8, min_samples_leaf=1,
                  progress=None, max_tree_depth=None, n_jobs=1,
                  init=True):
@@ -206,12 +211,18 @@ class MINDWALCTree(BaseEstimator, ClassifierMixin, MINDWALCMixin):
         self.tree_ = self._build_tree(self.neighborhoods, labels,
                                       useless=useless)
 
-    def predict(self, kg, instances):
+    def predict(self, kg, instances, test_labes):
         preds = []
         d = self.path_max_depth + 1
+        print("Entità   Classe-Reale    Classe-Predetta")
+        count = 0
         for inst in instances:
             neighborhood = kg.extract_neighborhood(inst, d)
-            preds.append(self.tree_.evaluate(neighborhood))
+            pred = self.tree_.evaluate(neighborhood)
+            print(str(inst) + "  #  " + test_labes[count] + "  #  " + str(pred))
+            preds.append(pred)
+            count = count + 1
+        print()
         return preds
 
 

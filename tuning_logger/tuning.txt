@@ -17,3 +17,20 @@ lr = 0.06
 num_bases = -1
 Epoch 00294 | Train Forward Time(s) 0.3416 | Backward Time(s) 1.3394
 Train Accuracy: 0.7820 | Train Loss: 2.5402 | Validation Accuracy: 0.6450 | Validation loss: 2.7118
+
+0.78
+
+Number of training data points: 544230
+Creating the new weighted Adj matrix!
+Training with the QGNN encoder
+Using Dual QGNN!
+and the customized QuatE decoder...
+Using Adam optimizer
+Starting training...
+Epoch: 1  --> Loss: 246.9145
+Epoch: 2  --> Loss: 1.1421
+Epoch: 3  --> Loss: 0.8096
+Epoch: 4  --> Loss: 0.7174
+Epoch: 5  --> Loss: 0.6600
+
+Process finished with exit code 0

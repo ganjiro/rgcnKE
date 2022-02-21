@@ -1,6 +1,8 @@
 from functools import partial
-from gnn.node_classification.layer import *
+
 import torch.nn.functional as F
+
+from gnn.node_classification.layer import *
 
 
 class RGCN(nn.Module):

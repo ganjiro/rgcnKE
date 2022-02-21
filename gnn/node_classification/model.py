@@ -1,8 +1,10 @@
 import time
+
 import dgl
 import numpy as np
-from gnn.node_classification.rgcn import *
 import torch
+
+from gnn.node_classification.rgcn import *
 
 
 class Model(nn.Module):
@@ -26,7 +28,7 @@ class Model(nn.Module):
         self.train_idx = None
         self.test_idx = None
 
-        self.labels_dict = None  # XXX NUOVA AGGIUNTA predict
+        self.labels_dict = None
 
         # ----
         self.graph = self.prepare_graph()
@@ -37,7 +39,7 @@ class Model(nn.Module):
         self._print_parameters()
 
     def prepare_graph(self):
-        self.labels_dict = self.data.label_dict  # XXX NUOVA AGGIUNTA predict
+        self.labels_dict = self.data.label_dict
 
         # num_nodes = self.data.num_nodes
         self.num_rels = self.data.num_rels
@@ -74,7 +76,7 @@ class Model(nn.Module):
             self.optimizer.zero_grad()
             t0 = time.time()
             logits = self.RGCN.forward(self.graph)
-            loss = F.cross_entropy(logits[self.train_idx], self.labels[self.train_idx].long())  # XXX type checl
+            loss = F.cross_entropy(logits[self.train_idx], self.labels[self.train_idx].long())  # XXX type check
             t1 = time.time()
             loss.backward()
             self.optimizer.step()
@@ -133,7 +135,6 @@ class Model(nn.Module):
         # self.test_idx 9533 la classe predetta per ogni elemento del test
 
         # print(self.labels[self.test_idx[0]].item())
-        # TODO SALVA IN UN CSV
         print("Entità   Classe-Reale    Classe-Predetta")
         for i in range(len(self.test_idx)):
             print("E" + str(self.test_idx[i]) + ":  " + str(self.labels_dict[self.labels[self.test_idx[i]].item()]) +
@@ -168,7 +169,6 @@ class Model(nn.Module):
             print()
 
     def check_entities_vector(self, entities_vector):
-        # TODO CHECK with list comprehension
         ret = True
         for i in entities_vector:
             if i not in self.test_idx:

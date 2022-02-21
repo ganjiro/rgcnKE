@@ -1,24 +1,13 @@
+import heapq
+from collections import defaultdict
+
 import matplotlib.pyplot as plt
 import networkx as nx
-import numpy as np
-import scipy.sparse as sp
-
-from collections import defaultdict, Counter, OrderedDict
-from functools import lru_cache
-import heapq
-
-import os
-import itertools
-import time
-
 import rdflib
 
-from scipy.stats import entropy
 
 # The idea of using a hashing function is taken from:
 # https://github.com/benedekrozemberczki/graph2vec
-from hashlib import md5
-import copy
 
 
 class Vertex(object):
