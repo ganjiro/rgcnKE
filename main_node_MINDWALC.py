@@ -2,13 +2,11 @@ import rdflib
 import pandas as pd
 from sklearn.metrics import accuracy_score
 
-import numpy as np
-
 # labels = np.load("km4city/labels.npz")
 # labels = labels["indices"]
 
-from gnn.link_prediction.tree_builder import MINDWALCTree, MINDWALCForest, MINDWALCTransform
-from gnn.link_prediction.datastructures import Graph
+from comparing_model.node_classification_MINDWALC.tree_builder import MINDWALCTree
+from comparing_model.node_classification_MINDWALC.datastructures import Graph
 
 rdf_file = "dataset\\km4city\\dataset_for_link_prediction\\classification\\km_link_pred.nt"
 _format = 'nt'

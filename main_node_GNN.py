@@ -12,7 +12,7 @@ from manage_dataset.splidataset import *
 datasets = 'km4c'
 curr_dir = str(os.getcwd()) + "\\dataset\\km4city\\dataset_for_node_classification\\classification"
 
-split_dataset(test_size=0.2, path=curr_dir)
+split_dataset(test_size=0.5, path=curr_dir)
 data = ll.load_dataset(label_header='label', nodes_header='nodes', datasets=datasets, dir=curr_dir)
 
 # parametri
@@ -30,7 +30,7 @@ model.fit()
 
 # model.predict()
 
-entities_vector = [10000]
+entities_vector = [1000]
 model.predict_single(entities_vector)
 
 # TODO booleano che elimina: edges, labels, test_idx, train_idx

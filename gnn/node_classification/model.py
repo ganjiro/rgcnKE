@@ -110,6 +110,7 @@ class Model(nn.Module):
 
         print("Mean forward time: {:4f}".format(np.mean(forward_time[len(forward_time) // 4:])))
         print("Mean backward time: {:4f}".format(np.mean(backward_time[len(backward_time) // 4:])))
+        print()
 
     def _print_parameters(self):
         print(
