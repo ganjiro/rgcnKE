@@ -162,6 +162,7 @@ class Model(nn.Module):
                     "E" + str(test_idx[i]) + ":  " + str(self.labels_dict[self.labels[test_idx[i]].item()]) +
                     " " + str(self.labels_dict[torch.argmax(logits[test_idx[i]]).item()]))
         else:
+            print()
             print("La lista di entità da esaminare richiesta non è totalmente compresa nel datatest")
             print()
 
