@@ -1,6 +1,7 @@
 import os
 import manage_dataset.loader as ll
 from gnn.node_classification.model import *
+from manage_dataset.splidataset import *
 
 # XXX old method used to load data from server
 # load graph data
@@ -10,6 +11,8 @@ from gnn.node_classification.model import *
 # TODO RANDOM SPLIT DATASET
 datasets = 'km4c'
 curr_dir = str(os.getcwd()) + "\\dataset\\km4city\\dataset_for_node_classification\\classification"
+
+split_dataset(test_size=0.2, path=curr_dir)
 data = ll.load_dataset(label_header='label', nodes_header='nodes', datasets=datasets, dir=curr_dir)
 
 # parametri
@@ -25,9 +28,9 @@ model = Model(data=data, h_dim=n_hidden, num_hidden_layers=num_hidden_layers, n_
 
 model.fit()
 
-model.predict()
+# model.predict()
 
-entities_vector = [1, 2, 3]
+entities_vector = [10000]
 model.predict_single(entities_vector)
 
 # TODO booleano che elimina: edges, labels, test_idx, train_idx

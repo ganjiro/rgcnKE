@@ -46,7 +46,7 @@ df2.to_csv('../dataset/completeDataset.tsv', index=True, sep='\t')
 df = pd.read_csv("../dataset/completeDataset.tsv", sep='\t', encoding='ISO-8859-1')
 df3 = df[['nodes', 'id', 'label']]
 df3.index = np.arange(1, len(df3)+1)
-df3.to_csv('../dataset/daSplittare.tsv', index=False, sep='\t')
+df3.to_csv('../dataset/km4city/dataset_for_node_classification/classification/daSplittare.tsv', index=False, sep='\t')
 
 
 file_name = '../dataset/km4c_stripped.nt'
@@ -60,5 +60,5 @@ with open(file_name, 'w', encoding='ISO-8859-1') as f:
 
 fix_quotation('../dataset/completeDataset.tsv')
 fix_quotation('../dataset/km4c_stripped.nt')
-fix_quotation('../dataset/daSplittare.tsv')
+fix_quotation('../dataset/km4city/dataset_for_node_classification/classification/daSplittare.tsv')
 
