@@ -198,6 +198,7 @@ class DatasetLoader(object):
             labels_set = set(labels_df[label_header].values.tolist())
             labels_dict = {lab: i for i, lab in enumerate(list(labels_set))}
             labels_out = {i: lab for i, lab in enumerate(list(labels_set))}
+            np.save(labels_out_path, labels_out)
 
             print('{} classes: {}'.format(len(labels_set), labels_set))
 
@@ -246,7 +247,7 @@ class DatasetLoader(object):
 
             np.save(train_idx_file, train_idx)
             np.save(test_idx_file, test_idx)
-            np.save(labels_out_path, labels_out)
+
 
         return labels_out, num_node, edge_list, num_rel, labels, labeled_nodes_idx, train_idx, test_idx
 

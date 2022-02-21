@@ -17,5 +17,7 @@ def split_dataset(test_size=0.2, path=None):
     fix_quotation(str(path) + '\\testSet.tsv', True)
     fix_quotation(str(path) + '\\trainingSet.tsv', True)
 
-    # np.save(str(path) + '\\train_idx.npy', train)
-    # np.save(str(path) + '\\test_idx.npy', test)
+    edges = str(path) + "\\edges.npz"
+
+    if os.path.isfile(edges):
+        os.remove(edges)

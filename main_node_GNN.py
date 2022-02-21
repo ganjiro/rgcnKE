@@ -28,9 +28,10 @@ model = Model(data=data, h_dim=n_hidden, num_hidden_layers=num_hidden_layers, n_
 
 model.fit()
 
-# model.predict()
+model.predict()
 
-entities_vector = [1000]
-model.predict_single(entities_vector)
+for i in range(5):
+    aaa = [18423,27164,9748,27164,31633]
+    entities_vector = [aaa[i]]
+    model.predict_single(entities_vector)
 
-# TODO booleano che elimina: edges, labels, test_idx, train_idx
