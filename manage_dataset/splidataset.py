@@ -1,7 +1,7 @@
 import os
-
 import pandas as pd
 from sklearn.model_selection import train_test_split
+from manage_dataset.reformat_data import fix_quotation
 
 
 def split_dataset(test_size=0.2, path=None):
@@ -10,6 +10,8 @@ def split_dataset(test_size=0.2, path=None):
 
     train.to_csv(str(path) + '\\testSet.tsv', index=False, sep='\t')
     test.to_csv(str(path) + '\\trainingSet.tsv', index=False, sep='\t')
+    fix_quotation(str(path) + '\\testSet.tsv', True)
+    fix_quotation(str(path) + '\\trainingSet.tsv', True)
 
     edges = str(path) + "\\edges.npz"
 

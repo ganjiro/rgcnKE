@@ -8,7 +8,7 @@ from manage_dataset.splidataset import *
 # from dgl.contrib.data import load_data
 # data = load_data(dataset='aifb')
 
-# TODO RANDOM SPLIT DATASET
+
 datasets = 'km4c'
 curr_dir = str(os.getcwd()) + "\\dataset\\km4city\\dataset_for_node_classification\\classification"
 

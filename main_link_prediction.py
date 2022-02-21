@@ -37,7 +37,7 @@ test_labels = test_data[label_col]
 
 kg = Graph.rdflib_to_graph(g, label_predicates=label_predicates)
 
-# à###########hediwuwhduw
+# à###########hediwuwhduw IMPORTANTE
 
 clf = MINDWALCTree()
 # clf = MINDWALCForest()
