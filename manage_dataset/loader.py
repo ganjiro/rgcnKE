@@ -114,8 +114,8 @@ class DatasetLoader(object):
 
         graph_file = os.path.join(dataset_path, '{}_stripped.nt.gz'.format(dataset_str))
         task_file = os.path.join(dataset_path, 'completeDataset.tsv')
-        train_file = os.path.join(dataset_path, 'trainingSet.tsv')
-        test_file = os.path.join(dataset_path, 'testSet.tsv')
+        train_file = os.path.join(dataset_path, 'train.txt')
+        test_file = os.path.join(dataset_path, 'test.txt')
 
         edge_file = os.path.join(dataset_path, 'edges.npz')
         labels_file = os.path.join(dataset_path, 'labels.npz')

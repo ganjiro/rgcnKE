@@ -197,6 +197,7 @@ if __name__ == '__main__':
 
     dataset = args.dataset
     data_dir = "data/%s/" % dataset
+
     torch.backends.cudnn.deterministic = True
     d = Data(data_dir=data_dir)
 

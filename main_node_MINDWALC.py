@@ -18,8 +18,8 @@ prev_path = str(os.getcwd()) + "\\dataset\\km4city\\dataset_for_node_classificat
 split_dataset(test_size=0.2, path=path)
 rdf_file = str(path) + "\\km4c_stripped.nt"
 _format = 'nt'
-train_file = str(path) + "\\trainingSet.tsv"
-test_file = str(path) + "\\testSet.tsv"
+train_file = str(path) + "\\train.txt"
+test_file = str(path) + "\\test.txt"
 entity_col = 'nodes'
 label_col = 'label'
 label_predicates = [

@@ -12,10 +12,10 @@ def split_dataset(test_size=0.2, path=None):
     df = pd.read_csv(str(path) + "\\daSplittare.tsv", sep='\t', encoding='ISO-8859-1')
     train, test = train_test_split(df, test_size=test_size, random_state=seed, shuffle=True)
 
-    train.to_csv(str(path) + '\\testSet.tsv', index=False, sep='\t')
-    test.to_csv(str(path) + '\\trainingSet.tsv', index=False, sep='\t')
-    fix_quotation(str(path) + '\\testSet.tsv', True)
-    fix_quotation(str(path) + '\\trainingSet.tsv', True)
+    train.to_csv(str(path) + '\\test.txt', index=False, sep='\t')
+    test.to_csv(str(path) + '\\train.txt', index=False, sep='\t')
+    fix_quotation(str(path) + '\\test.txt', True)
+    fix_quotation(str(path) + '\\train.txt', True)
 
     edges = str(path) + "\\edges.npz"
 

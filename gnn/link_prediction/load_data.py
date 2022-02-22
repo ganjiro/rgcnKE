@@ -4,7 +4,9 @@ import numpy as np
 
 class Data:
 
-    def __init__(self, data_dir="data/FB15k-237/", reverse=True):
+    def __init__(self, data_dir="data/FB15k-237/", reverse=False):
+        data_dir = "C:\\Users\\Girolamo\\PycharmProjects\\rgcnKE_sus\\dataset\\km4city\\dataset_for_link_prediction\\classification\\"
+
         self.train_data = self.load_data(data_dir, "train", reverse=reverse)
         self.valid_data = self.load_data(data_dir, "valid", reverse=reverse)
         self.test_data = self.load_data(data_dir, "test", reverse=reverse)
@@ -30,5 +32,9 @@ class Data:
         return relations
 
     def get_entities(self, data):
-        entities = sorted(list(set([d[0] for d in data]+[d[2] for d in data])))
+        aa = []
+        for x in data:
+            print(x)
+            aa.append(x[2])
+        entities = sorted(list(set([d[0] for d in data]+aa)))
         return entities
