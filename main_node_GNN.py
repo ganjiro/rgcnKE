@@ -2,9 +2,9 @@
 # TODO salvare le predizioni
 # TODO tuning
 
-import manage_dataset.loader as ll
+import gnn.node_classification.loader as ll
 from gnn.node_classification.model import *
-from manage_dataset.splidataset import *
+from DataManagement.DataUtils import *
 
 # XXX old method used to load data from server
 # load graph data

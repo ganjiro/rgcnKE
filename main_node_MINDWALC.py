@@ -6,7 +6,7 @@ from sklearn.metrics import accuracy_score
 
 from comparing_model.node_classification_MINDWALC.datastructures import Graph
 from comparing_model.node_classification_MINDWALC.tree_builder import MINDWALCTree
-from manage_dataset.splidataset import *
+from DataManagement.DataUtils import *
 
 # labels = np.load("km4city/labels.npz")
 # labels = labels["indices"]
