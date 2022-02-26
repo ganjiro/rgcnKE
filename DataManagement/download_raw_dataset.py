@@ -1,7 +1,11 @@
 from SPARQLWrapper import SPARQLWrapper, JSON, TSV
+from pathlib import Path
 
+def open_secure(path, type):
+    Path(path).parent.mkdir(parents=True, exist_ok=True)
+    return open(path, type)
 
-def download_km4c(file_path="../dataset/RawDataset/subgraph_data.tsv", sparql_endpoint="http://localhost:3030/myFuseki/query", want_tsv=True):
+def download_km4c(file_path="../dataset/km4c/RawDowloaded/subgraph_data.tsv", sparql_endpoint="http://localhost:3030/myFuseki/query", want_tsv=True):
     print("\nAvviata procedura di download del sottografo di km4c...")
 
     # stabilisce la connessione con l'endpoint
@@ -16,7 +20,8 @@ def download_km4c(file_path="../dataset/RawDataset/subgraph_data.tsv", sparql_en
     """)
     sparql.setReturnFormat(JSON)
     risQuery1 = sparql.query().convert()
-    file = open(file_path, "w") # se non esiste lo crea
+
+    file = open_secure(file_path, "w") 
     if want_tsv:
         file.write('s\tp\to\n')
 
@@ -58,4 +63,4 @@ def download_km4c(file_path="../dataset/RawDataset/subgraph_data.tsv", sparql_en
 
 
 if __name__ == '__main__':
-    download_km4c(file_path="../dataset/subgraph_data.TSV", want_tsv=True)
+    download_km4c(file_path="../dataset/km4c/RawDowloaded/subgraph_data.TSV", want_tsv=True)

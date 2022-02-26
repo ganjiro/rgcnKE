@@ -7,10 +7,14 @@ import re
 import os
 from random import randint
 from sklearn.model_selection import train_test_split
+from pathlib import Path
 
+def open_secure(path, type, encoding = "UTF-8"):
+    Path(path).parent.mkdir(parents=True, exist_ok=True)
+    return open(path, type, encoding=encoding)
 
 def fix_quotation_node(file_path, remove_brakets=False):
-    with open(file_path, 'r', encoding="ISO-8859-1") as file:
+    with open_secure(file_path, 'r', encoding="ISO-8859-1") as file:
         filedata = file.read()
 
     filedata = filedata.replace('#%#', '"')
@@ -18,11 +22,11 @@ def fix_quotation_node(file_path, remove_brakets=False):
         filedata = filedata.replace('<', '')
         filedata = filedata.replace('>', '')
 
-    with open(file_path, 'w', encoding="ISO-8859-1") as file:
+    with open_secure(file_path, 'w', encoding="ISO-8859-1") as file:
         file.write(filedata)
 
 def fix_quotation_link(file_path, remove_brakets=False):
-    with open(file_path, 'r', encoding="ISO-8859-1") as file:
+    with open_secure(file_path, 'r', encoding="ISO-8859-1") as file:
         filedata = file.read()
 
     filedata = filedata.replace('s\tp\to\n', '')
@@ -47,22 +51,22 @@ def fix_quotation_link(file_path, remove_brakets=False):
         filedata = filedata.replace('<', '')
         filedata = filedata.replace('>', '')
 
-    with open(file_path, 'w', encoding="ISO-8859-1") as file:
+    with open_secure(file_path, 'w', encoding="ISO-8859-1") as file:
         file.write(filedata)
 
-    with open(file_path, 'r', encoding="iso-8859-1") as fr:
-        with open(file_path.replace("XXX", ""), 'w', encoding='UTF-8') as fw:
+    with open_secure(file_path, 'r', encoding="iso-8859-1") as fr:
+        with open_secure(file_path.replace("XXX", ""), 'w', encoding='UTF-8') as fw:
             for line in fr:
                 fw.write(line[:-1] + '\n')
 
 
 def reformat_data_for_pykeen():
-    with open("../dataset/km4city/RawDowloaded/subgraph_data.tsv", 'r') as file:
+    with open_secure("../dataset/km4city/RawDowloaded/subgraph_data.tsv", 'r') as file:
         filedata = file.read()
 
     filedata = filedata.replace('"', 'XZXZXZX')
 
-    with open("../dataset/km4city/RawDowloaded/subgraph_data_fix.tsv", 'w') as file:
+    with open_secure("../dataset/km4city/RawDowloaded/subgraph_data_fix.tsv", 'w') as file:
         file.write(filedata)
 
     df = pd.read_csv("../dataset/km4city/RawDowloaded/subgraph_data_fix.tsv", sep='\t', encoding='ISO-8859-1')
@@ -81,12 +85,12 @@ def reformat_data_for_pykeen():
 
 
 def reformat_data_for_noge():
-    with open("../dataset/km4city/RawDowloaded/subgraph_data.tsv", 'r') as file:
+    with open_secure("../dataset/km4city/RawDowloaded/subgraph_data.tsv", 'r') as file:
         filedata = file.read()
 
     filedata = filedata.replace('"', 'DIOCANE')
 
-    with open("../dataset/subgraph_data_fix.tsv", 'w') as file:
+    with open_secure("../dataset/subgraph_data_fix.tsv", 'w') as file:
         file.write(filedata)
 
     df = pd.read_csv("../dataset/subgraph_data_fix.tsv", sep='\t', encoding='ISO-8859-1')
@@ -107,12 +111,12 @@ def reformat_data_for_noge():
 
 
 def reformat_data_for_rgcn():
-    with open("../dataset/km4city/RawDowloaded/subgraph_data.tsv", 'r') as file :
+    with open_secure("../dataset/km4city/RawDowloaded/subgraph_data.tsv", 'r') as file :
       filedata = file.read()
 
     filedata = filedata.replace('"', '#%#')
 
-    with open("../dataset/km4city/RawDowloaded/subgraph_data.tsv", 'w') as file:
+    with open_secure("../dataset/km4city/RawDowloaded/subgraph_data.tsv", 'w') as file:
       file.write(filedata)
 
     df = pd.read_csv("../dataset/km4city/RawDowloaded/subgraph_data.tsv", sep='\t', encoding='ISO-8859-1')
@@ -143,25 +147,25 @@ def reformat_data_for_rgcn():
     file_name = '../dataset/km4city/NodeClassification/Rgcn/km4c_stripped.nt'
     string_to_add = " ."
 
-    with open(file_name, 'r',encoding='ISO-8859-1') as f:
+    with open_secure(file_name, 'r',encoding='ISO-8859-1') as f:
         file_lines = [''.join([x.strip(), string_to_add, '\n']) for x in f.readlines()]
 
-    with open(file_name, 'w', encoding='ISO-8859-1') as f:
+    with open_secure(file_name, 'w', encoding='ISO-8859-1') as f:
         f.writelines(file_lines)
 
     fix_quotation_node('../dataset/km4city/NodeClassification/Rgcn/completeDataset.tsv', True)
 
-    with open('../dataset/km4city/NodeClassification/Rgcn/km4c_stripped.nt', 'r', encoding="ISO-8859-1") as file:
+    with open_secure('../dataset/km4city/NodeClassification/Rgcn/km4c_stripped.nt', 'r', encoding="ISO-8859-1") as file:
         filedata = file.read()
 
     filedata = filedata.replace('s p o .\n', '')
     filedata = filedata.replace('"', '')
     filedata = filedata.replace('#%#', '"')
 
-    with open('../dataset/km4city/NodeClassification/Rgcn/km4c_stripped.nt', 'w', encoding="ISO-8859-1") as file:
+    with open_secure('../dataset/km4city/NodeClassification/Rgcn/km4c_stripped.nt', 'w', encoding="ISO-8859-1") as file:
         file.write(filedata)
 
-    input = open('../dataset/km4city/NodeClassification/Rgcn/km4c_stripped.nt', 'rb')
+    input = open_secure('../dataset/km4city/NodeClassification/Rgcn/km4c_stripped.nt', 'rb')
     s = input.read()
     input.close()
 
@@ -189,21 +193,21 @@ def split_dataset(filename, test_size=0.2, node = True):
 
 
 def to_utf8(filename_in, filename_out):
-    with open(filename_in, 'r', encoding="iso-8859-1") as fr:
-        with open(filename_out, 'w', encoding='UTF-8') as fw:
+    with open_secure(filename_in, 'r', encoding="iso-8859-1") as fr:
+        with open_secure(filename_out, 'w', encoding='UTF-8') as fw:
             for line in fr:
                 fw.write(line[:-1] + '\n')
 
 
-def reformat_data(data_type = "rgcn"):
-    match data_type.lower():
-        case "rgcn":
-            reformat_data_for_rgcn()
-        case "noge":
-            reformat_data_for_noge()
-        case "pykeen":
-            reformat_data_for_pykeen()
-    return
+def reformat_data(data_type="rgcn"):
+    if data_type.lower() == "rgcn":
+        reformat_data_for_rgcn()
+    elif data_type.lower() == "noge":
+        reformat_data_for_noge()
+    elif data_type.lower() == "pykeen":
+        reformat_data_for_pykeen()
+    else:
+        raise Exception("Model not found")
 
 if __name__ == "__main__":
     reformat_data()
