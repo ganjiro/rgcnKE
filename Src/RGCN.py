@@ -5,6 +5,7 @@
 import Src.gnn.node_classification.loader as ll
 from Src.gnn.node_classification.model import *
 from Src.DataManagement.reformat_data import split_dataset, reformat_data
+import os
 
 
 # XXX old method used to load data from server
@@ -26,7 +27,8 @@ class RGCN_node_classification():
         self.num_bases = 28
 
     def fit(self):
-        split_dataset(r"{}/{}/NodeClassification/RGCN/unsplitted.tsv".format(self.directory, self.dataset),test_size=0.2 )
+        if self.random_split or not os.path.exists(r"{}/{}/NodeClassification/RGCN/train.txt".format(self.directory, self.dataset)) :
+            split_dataset(r"{}/{}/NodeClassification/RGCN/unsplitted.tsv".format(self.directory, self.dataset),test_size=0.2 )
         self.data = ll.load_dataset(label_header='label', nodes_header='nodes', datasets=self.dataset,
                                     dir=r"{}/{}/NodeClassification/RGCN/".format(self.directory, self.dataset))
 

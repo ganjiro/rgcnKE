@@ -8,6 +8,7 @@ import os
 from random import randint
 from sklearn.model_selection import train_test_split
 from pathlib import Path
+from distutils.dir_util import copy_tree
 
 def open_secure(path, type, encoding = None):
     Path(path).parent.mkdir(parents=True, exist_ok=True)
@@ -147,7 +148,7 @@ def reformat_data_for_node_classification(directory, dataset='km4city'):
     df = pd.read_csv(r"{}/{}/NodeClassification/RGCN/completeDataset.tsv".format(directory, dataset), sep='\t', encoding='ISO-8859-1')
     df3 = df[['nodes', 'id', 'label']]
     df3.index = np.arange(1, len(df3)+1)
-    df3.to_csv(r'{}/{}/NodeClassification/Rgcn/daSplittare.tsv'.format(directory, dataset), index=False, sep='\t')
+    df3.to_csv(r'{}/{}/NodeClassification/Rgcn/unsplitted.tsv'.format(directory, dataset), index=False, sep='\t')
 
 
     file_name = r'{}/{}/NodeClassification/Rgcn/{}_stripped.nt'.format(directory, dataset, dataset)
@@ -179,22 +180,28 @@ def reformat_data_for_node_classification(directory, dataset='km4city'):
     output.write(s)
     output.close()
 
+    copy_tree(r'{}/{}/NodeClassification/Rgcn/'.format(directory, dataset), r'{}/{}/NodeClassification/MINDWALC/'.format(directory, dataset))
+    filelist = [f for f in os.listdir(mydir) if f.endswith(".npz") or f.endswith(".npy")]
+    for f in filelist:
+        os.remove(os.path.join(r'{}/{}/NodeClassification/Rgcn/'.format(directory, dataset), f))
+
+
 def split_dataset(filename, test_size=0.2, node = True):
     seed = randint(1, 1000)
     df = pd.read_csv(filename, sep='\t', encoding='ISO-8859-1')
     train, test = train_test_split(df, test_size=test_size, random_state=seed, shuffle=True)
 
-    train.to_csv(os.path.dirname + '\\test.txt', index=False, sep='\t')
-    test.to_csv(os.path.dirname + '\\train.txt', index=False, sep='\t')
+    train.to_csv( r'{}\test.txt'.format(os.path.dirname(filename)), index=False, sep='\t')
+    test.to_csv(r'{}\train.txt'.format(os.path.dirname(filename)), index=False, sep='\t')
     if node:
-        fix_quotation_node(os.path.dirname + '\\test.txt', True)
-        fix_quotation_node(os.path.dirname + '\\train.txt', True)
+        fix_quotation_node(r'{}\test.txt'.format(os.path.dirname(filename)), True)
+        fix_quotation_node(r'{}\train.txt'.format(os.path.dirname(filename)), True)
 
-        if os.path.isfile(os.path.dirname + "\\edges.npz"):
-            os.remove(os.path.dirname + "\\edges.npz")
+        if os.path.isfile(r'{}\edges.npz'.format(os.path.dirname(filename))):
+            os.remove(r'{}\edges.npz'.format(os.path.dirname(filename)))
     else:
-        fix_quotation_link(os.path.dirname + '\\test.txt', True)
-        fix_quotation_link(os.path.dirname + '\\train.txt', True)
+        fix_quotation_link(r'{}\test.txt'.format(os.path.dirname(filename)), True)
+        fix_quotation_link(r'{}\train.txt'.format(os.path.dirname(filename)), True)
 
 
 
