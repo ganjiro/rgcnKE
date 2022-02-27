@@ -4,7 +4,7 @@ import dgl
 import numpy as np
 import torch
 
-from gnn.node_classification.rgcn import *
+from Src.gnn.node_classification.rgcn import *
 
 
 class Model(nn.Module):

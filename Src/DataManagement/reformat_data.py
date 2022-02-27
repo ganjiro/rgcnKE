@@ -9,9 +9,13 @@ from random import randint
 from sklearn.model_selection import train_test_split
 from pathlib import Path
 
-def open_secure(path, type, encoding = "UTF-8"):
+def open_secure(path, type, encoding = None):
     Path(path).parent.mkdir(parents=True, exist_ok=True)
-    return open(path, type, encoding=encoding)
+    if encoding:
+        file = open(path, type, encoding=encoding)
+    else:
+        file = open(path, type)
+    return file
 
 def fix_quotation_node(file_path, remove_brakets=False):
     with open_secure(file_path, 'r', encoding="ISO-8859-1") as file:
@@ -60,8 +64,8 @@ def fix_quotation_link(file_path, remove_brakets=False):
                 fw.write(line[:-1] + '\n')
 
 
-def reformat_data_for_pykeen():
-    with open_secure("../dataset/km4city/RawDowloaded/subgraph_data.tsv", 'r') as file:
+def reformat_data_for_pykeen(directory, dataset='km4city'):
+    with open_secure("../../dataset/km4city/RawDowloaded/subgraph_data.tsv", 'r') as file:
         filedata = file.read()
 
     filedata = filedata.replace('"', 'XZXZXZX')
@@ -74,18 +78,20 @@ def reformat_data_for_pykeen():
     df = df.drop_duplicates()
     df = df.replace(r'[^0-9a-zA-Z ]', '', regex=True)
 
-    df.to_csv('../dataset/km4city/linkPrediction/Pykeen/CompleteXXX.txt', index=False, sep='\t')
-    fix_quotation_link('../dataset/km4city/linkPrediction/Pykeen/CompleteXXX.txt')
+    df.to_csv(r'{}/{}/km4city/linkPrediction/Pykeen/CompleteXXX.txt', index=False, sep='\t')
+    fix_quotation_link(r'{}/{}/km4city/linkPrediction/Pykeen/CompleteXXX.txt')
 
-    if os.path.exists('../dataset/km4city/linkPrediction/Pykeen/CompleteXXX.txt'):
-        os.remove('../dataset/km4city/linkPrediction/Pykeen/CompleteXXX.txt')
+    if os.path.exists(r'{}/{}/km4city/linkPrediction/Pykeen/CompleteXXX.txt'):
+        os.remove(r'{}/{}/km4city/linkPrediction/Pykeen/CompleteXXX.txt')
 
-    if os.path.exists('../dataset/km4city/RawDowloaded/subgraph_data_fix.tsv'):
-        os.remove('../dataset/km4city/RawDowloaded/subgraph_data_fix.tsv')
+    if os.path.exists(r'{}/{}/km4city/RawDowloaded/subgraph_data_fix.tsv'):
+        os.remove(r'{}/{}/RawDowloaded/subgraph_data_fix.tsv')
 
 
-def reformat_data_for_noge():
-    with open_secure("../dataset/km4city/RawDowloaded/subgraph_data.tsv", 'r') as file:
+def reformat_data_for_noge(directory, dataset='km4city'): #todo fix noge
+
+
+    with open_secure("../../dataset/km4city/RawDowloaded/subgraph_data.tsv", 'r') as file:
         filedata = file.read()
 
     filedata = filedata.replace('"', 'DIOCANE')
@@ -101,31 +107,31 @@ def reformat_data_for_noge():
     train_val, test = train_test_split(df, test_size=0.2, shuffle=False)
     train, val = train_test_split(train_val, test_size=0.2, shuffle=False)
 
-    train.to_csv('../dataset/km4city/dataset_for_link_prediction/classification/trainXXX.txt', index=False, sep='\t')
-    test.to_csv('../dataset/km4city/dataset_for_link_prediction/classification/testXXX.txt', index=False, sep='\t')
-    val.to_csv('../dataset/km4city/dataset_for_link_prediction/classification/validXXX.txt', index=False, sep='\t')
+    train.to_csv(r'{}/{}/dataset_for_link_prediction/classification/trainXXX.txt', index=False, sep='\t')
+    test.to_csv(r'{}/{}/dataset_for_link_prediction/classification/testXXX.txt', index=False, sep='\t')
+    val.to_csv(r'{}/{}/dataset_for_link_prediction/classification/validXXX.txt', index=False, sep='\t')
 
-    fix_quotation_link('../dataset/km4city/dataset_for_link_prediction/classification/testXXX.txt')
-    fix_quotation_link('../dataset/km4city/dataset_for_link_prediction/classification/trainXXX.txt')
-    fix_quotation_link('../dataset/km4city/dataset_for_link_prediction/classification/validXXX.txt')
+    fix_quotation_link(r'{}/{}/dataset_for_link_prediction/classification/testXXX.txt')
+    fix_quotation_link(r'{}/{}/dataset_for_link_prediction/classification/trainXXX.txt')
+    fix_quotation_link(r'{}/{}/dataset_for_link_prediction/classification/validXXX.txt')
 
 
-def reformat_data_for_rgcn():
-    with open_secure("../dataset/km4city/RawDowloaded/subgraph_data.tsv", 'r') as file :
+def reformat_data_for_node_classification(directory, dataset='km4city'):
+    with open_secure(r"{}/{}/RawDowloaded/subgraph_data.tsv".format(directory, dataset), 'r', encoding='ISO-8859-1') as file :
       filedata = file.read()
 
     filedata = filedata.replace('"', '#%#')
 
-    with open_secure("../dataset/km4city/RawDowloaded/subgraph_data.tsv", 'w') as file:
+    with open_secure(r"{}/{}/RawDowloaded/subgraph_data.tsv".format(directory, dataset), 'w', encoding='ISO-8859-1') as file:
       file.write(filedata)
 
-    df = pd.read_csv("../dataset/km4city/RawDowloaded/subgraph_data.tsv", sep='\t', encoding='ISO-8859-1')
+    df = pd.read_csv(r"{}/{}/RawDowloaded/subgraph_data.tsv".format(directory, dataset), sep='\t', encoding='ISO-8859-1')
 
     df = df.drop_duplicates()
     df1 = df.query('p != "<http://www.disit.org/km4city/schema#eventCategory>"')
     df2 = df.query('p == "<http://www.disit.org/km4city/schema#eventCategory>"')
 
-    df1.to_csv('../dataset/km4city/NodeClassification/Rgcn/km4c_stripped.nt',index=False, sep=' ')
+    df1.to_csv(r'{}/{}/NodeClassification/Rgcn/{}_stripped.nt'.format(directory, dataset, dataset),index=False, sep=' ')
 
     df2 = df2[~df2['o'].str.contains('@en')]
     df2.reset_index(drop=True, inplace=True)
@@ -135,16 +141,16 @@ def reformat_data_for_rgcn():
               inplace=True, errors='raise')
     df2.index = np.arange(1, len(df2)+1)
     df2.index.name = 'id'
-    df2.to_csv('../dataset/km4city/NodeClassification/Rgcn/completeDataset.tsv', index=True, sep='\t')
+    df2.to_csv(r'{}/{}/NodeClassification/Rgcn/completeDataset.tsv'.format(directory, dataset), index=True, sep='\t')
 
 
-    df = pd.read_csv("../dataset/km4city/NodeClassification/Rgcn/completeDataset.tsv", sep='\t', encoding='ISO-8859-1')
+    df = pd.read_csv(r"{}/{}/NodeClassification/RGCN/completeDataset.tsv".format(directory, dataset), sep='\t', encoding='ISO-8859-1')
     df3 = df[['nodes', 'id', 'label']]
     df3.index = np.arange(1, len(df3)+1)
-    df3.to_csv('../dataset/km4city/NodeClassification/Rgcn/daSplittare.tsv', index=False, sep='\t')
+    df3.to_csv(r'{}/{}/NodeClassification/Rgcn/daSplittare.tsv'.format(directory, dataset), index=False, sep='\t')
 
 
-    file_name = '../dataset/km4city/NodeClassification/Rgcn/km4c_stripped.nt'
+    file_name = r'{}/{}/NodeClassification/Rgcn/{}_stripped.nt'.format(directory, dataset, dataset)
     string_to_add = " ."
 
     with open_secure(file_name, 'r',encoding='ISO-8859-1') as f:
@@ -153,23 +159,23 @@ def reformat_data_for_rgcn():
     with open_secure(file_name, 'w', encoding='ISO-8859-1') as f:
         f.writelines(file_lines)
 
-    fix_quotation_node('../dataset/km4city/NodeClassification/Rgcn/completeDataset.tsv', True)
+    fix_quotation_node(r'{}/{}/NodeClassification/RGCN/completeDataset.tsv'.format(directory, dataset), True)
 
-    with open_secure('../dataset/km4city/NodeClassification/Rgcn/km4c_stripped.nt', 'r', encoding="ISO-8859-1") as file:
+    with open_secure(r'{}/{}/NodeClassification/Rgcn/{}_stripped.nt'.format(directory, dataset, dataset), 'r', encoding="ISO-8859-1") as file:
         filedata = file.read()
 
     filedata = filedata.replace('s p o .\n', '')
     filedata = filedata.replace('"', '')
     filedata = filedata.replace('#%#', '"')
 
-    with open_secure('../dataset/km4city/NodeClassification/Rgcn/km4c_stripped.nt', 'w', encoding="ISO-8859-1") as file:
+    with open_secure(r'{}/{}/NodeClassification/Rgcn/{}_stripped.nt'.format(directory, dataset, dataset), 'w', encoding="ISO-8859-1") as file:
         file.write(filedata)
 
-    input = open_secure('../dataset/km4city/NodeClassification/Rgcn/km4c_stripped.nt', 'rb')
+    input = open_secure(r'{}/{}/NodeClassification/Rgcn/{}_stripped.nt'.format(directory, dataset, dataset), 'rb')
     s = input.read()
     input.close()
 
-    output = gzip.GzipFile('../dataset/km4city/NodeClassification/Rgcn/km4c_stripped.nt.gz', 'wb')
+    output = gzip.GzipFile(r'{}/{}/NodeClassification/Rgcn/{}_stripped.nt.gz'.format(directory, dataset, dataset), 'wb')
     output.write(s)
     output.close()
 
@@ -192,22 +198,25 @@ def split_dataset(filename, test_size=0.2, node = True):
 
 
 
-def to_utf8(filename_in, filename_out):
+def to_utf8(filename_in):
     with open_secure(filename_in, 'r', encoding="iso-8859-1") as fr:
-        with open_secure(filename_out, 'w', encoding='UTF-8') as fw:
+        with open_secure(r'{}utf'.format(filename_in), 'w', encoding='UTF-8') as fw:
             for line in fr:
                 fw.write(line[:-1] + '\n')
+    os.remove(filename_in)
+    os.rename(r'{}utf'.format(filename_in), filename_in)
 
 
-def reformat_data(data_type="rgcn"):
-    if data_type.lower() == "rgcn":
-        reformat_data_for_rgcn()
+def reformat_data(directory, dataset='km4city', data_type="node"):
+    to_utf8(r"{}/{}/RawDowloaded/subgraph_data.tsv".format(directory, dataset))
+    if data_type.lower() == "node":
+        reformat_data_for_node_classification(directory, dataset)
     elif data_type.lower() == "noge":
-        reformat_data_for_noge()
+        reformat_data_for_noge(directory, dataset)
     elif data_type.lower() == "pykeen":
-        reformat_data_for_pykeen()
+        reformat_data_for_pykeen(directory, dataset)
     else:
         raise Exception("Model not found")
 
 if __name__ == "__main__":
-    reformat_data()
+    reformat_data(r"C:\Users\Girolamo\PycharmProjects\rgcnKE_sus\dataset", 'km4city')
