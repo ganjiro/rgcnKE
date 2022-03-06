@@ -2,7 +2,7 @@ from functools import partial
 
 import torch.nn.functional as F
 
-from Src.gnn.node_classification.layer import *
+from Src.RGCN.layer import *
 
 
 class RGCN(nn.Module):

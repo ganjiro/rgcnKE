@@ -5,7 +5,6 @@ import numpy as np
 class Data:
 
     def __init__(self, data_dir="data/FB15k-237/", reverse=False):
-        data_dir = "C:\\Users\\Girolamo\\PycharmProjects\\rgcnKE_sus\\dataset\\km4city\\dataset_for_link_prediction\\classification\\"
 
         self.train_data = self.load_data(data_dir, "train", reverse=reverse)
         self.valid_data = self.load_data(data_dir, "valid", reverse=reverse)

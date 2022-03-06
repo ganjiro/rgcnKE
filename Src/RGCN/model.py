@@ -1,10 +1,8 @@
 import time
-
 import dgl
 import numpy as np
 import torch
-
-from Src.gnn.node_classification.rgcn import *
+from Src.RGCN.gnn_model import *
 
 
 class Model(nn.Module):

@@ -1,12 +1,5 @@
-from load_data import Data
-import numpy as np
-import torch
-import time
-from collections import defaultdict
-import argparse
-import scipy.sparse as sp
-from utils_NoGE import *
-from model_NoGE import *
+from Src.NoGE.utils_NoGE import *
+from Src.NoGE.model_NoGE import *
 
 torch.manual_seed(1337)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -18,9 +11,10 @@ np.random.seed(1337)
 class NoGE:
     """ Node Coherence-based Graph Neural Networks for Knowledge Graph Link Prediction """
 
-    def __init__(self, encoder="QGNN", decoder="QuatE", num_iterations=4000, batch_size=1024, learning_rate=0.01,
+    def __init__(self, data,encoder="QGNN", decoder="QuatE", num_iterations=4000, batch_size=1024, learning_rate=0.01,
                  label_smoothing=0.1,
                  hidden_dim=128, emb_dim=128, num_layers=1, variant="N", eval_step=1, eval_after=1):
+        self.data = data
         self.learning_rate = learning_rate
         self.num_iterations = num_iterations
         self.batch_size = batch_size
@@ -49,7 +43,7 @@ class NoGE:
 
     def get_batch(self, er_vocab, er_vocab_pairs, idx):
         batch = er_vocab_pairs[idx:idx + self.batch_size]
-        targets = np.zeros((len(batch), len(d.entities)))
+        targets = np.zeros((len(batch), len(self.data.entities)))
         for idx, pair in enumerate(batch):
             targets[idx, er_vocab[pair]] = 1.
         targets = torch.FloatTensor(targets)
@@ -65,7 +59,7 @@ class NoGE:
                 hits.append([])
 
             test_data_idxs = self.get_data_idxs(data)
-            er_vocab = self.get_er_vocab(self.get_data_idxs(d.data))
+            er_vocab = self.get_er_vocab(self.get_data_idxs(self.data.data))
             print("Number of data points: %d" % len(test_data_idxs))
 
             for i in range(0, len(test_data_idxs), self.batch_size):
@@ -105,13 +99,13 @@ class NoGE:
 
     # training and evaluating
     def train_and_eval(self):
-        self.entity_idxs = {d.entities[i]: i for i in range(len(d.entities))}
-        self.relation_idxs = {d.relations[i]: i for i in range(len(d.relations))}
-        train_data_idxs = self.get_data_idxs(d.train_data)
+        self.entity_idxs = {self.data.entities[i]: i for i in range(len(self.data.entities))}
+        self.relation_idxs = {self.data.relations[i]: i for i in range(len(self.data.relations))}
+        train_data_idxs = self.get_data_idxs(self.data.train_data)
         print("Number of training data points: %d" % len(train_data_idxs))
 
         print("Creating the new weighted Adj matrix!")
-        adj = compute_weighted_adj_matrix(d.train_data, self.entity_idxs, self.relation_idxs).to(device)
+        adj = compute_weighted_adj_matrix(self.data.train_data, self.entity_idxs, self.relation_idxs).to(device)
 
         if self.encoder.lower() == "gcn":
             print("Training with the GCN encoder")
@@ -133,7 +127,7 @@ class NoGE:
         print("Using Adam optimizer")
         opt = torch.optim.Adam(model.parameters(), lr=self.learning_rate)
 
-        lst_indexes = torch.LongTensor([i for i in range(len(d.entities) + len(d.relations))]).to(device)
+        lst_indexes = torch.LongTensor([i for i in range(len(self.data.entities) + len(self.data.relations))]).to(device)
         er_vocab = self.get_er_vocab(train_data_idxs)
         er_vocab_pairs = list(er_vocab.keys())
         max_valid = 0.0
@@ -166,13 +160,13 @@ class NoGE:
             # evaluation
             if it > self.eval_after and it % self.eval_step == 0:
                 print("Validation:")
-                tmp_hit10, _, _, _, tmp_mrr = self.evaluate(model, d.valid_data, lst_indexes)
+                tmp_hit10, _, _, _, tmp_mrr = self.evaluate(model, self.data.valid_data, lst_indexes)
                 if max_valid < tmp_mrr:
                     max_valid = tmp_mrr
                     best_epoch = it
                     print("Test:")
                     final_test_h10, final_test_h3, final_test_h1, final_test_mr, final_test_mrr = self.evaluate(model,
-                                                                                                                d.test_data,
+                                                                                                                self.data.test_data,
                                                                                                                 lst_indexes)
 
                 print("Best valid epoch", best_epoch, " --> Final test results: ", final_test_h10, final_test_h3,
@@ -201,7 +195,7 @@ if __name__ == '__main__':
     torch.backends.cudnn.deterministic = True
     d = Data(data_dir=data_dir)
 
-    gnnkge = NoGE(encoder=args.encoder, decoder=args.decoder, num_iterations=args.num_iterations,
+    gnnkge = NoGE(d,encoder=args.encoder, decoder=args.decoder, num_iterations=args.num_iterations,
                   batch_size=args.batch_size,
                   learning_rate=args.lr, hidden_dim=args.hidden_dim, emb_dim=args.emb_dim, num_layers=args.num_layers,
                   eval_step=args.eval_step, eval_after=args.eval_after, variant=args.variant)

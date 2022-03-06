@@ -2,10 +2,11 @@
 # TODO salvare le predizioni
 # TODO tuning
 
-import Src.gnn.node_classification.loader as ll
-from Src.gnn.node_classification.model import *
+import Src.RGCN.loader as ll
+from Src.RGCN.model import *
 from Src.DataManagement.reformat_data import split_dataset, reformat_data
 import os
+import configparser
 
 
 # XXX old method used to load data from server
@@ -18,13 +19,15 @@ class RGCN_node_classification():
     def __init__(self, directory, dataset='km4city'):
         self.dataset = dataset
         self.directory = directory
-        self.random_split = False  # todo caricarlo da ini
-        self.n_hidden = 16
-        self.num_hidden_layers = 1
-        self.epochs = 1
-        self.l2norm = 0.0005
-        self.lr = 0.01
-        self.num_bases = 28
+        config = configparser.ConfigParser()
+        config.read(r'{}\parameters\RGCN.ini'.format(self.directory.replace('dataset', "Src")))
+        self.random_split = config.getboolean('config', 'random_split')
+        self.n_hidden = config.getint('config', 'n_hidden')
+        self.num_hidden_layers = config.getint('config', 'num_hidden_layers')
+        self.epochs = config.getint('config', 'epochs')
+        self.l2norm = config.getfloat('config', 'l2norm')
+        self.lr = config.getfloat('config', 'lr')
+        self.num_bases = config.getint('config', 'num_bases')
 
     def fit(self):
         if self.random_split or not os.path.exists(r"{}/{}/NodeClassification/RGCN/train.txt".format(self.directory, self.dataset)) :

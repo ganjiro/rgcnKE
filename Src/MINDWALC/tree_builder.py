@@ -6,7 +6,7 @@ import ray
 from scipy.stats import entropy
 from sklearn.base import ClassifierMixin, TransformerMixin, BaseEstimator
 
-import comparing_model.node_classification_MINDWALC.datastructures as ds
+import Src.MINDWALC.datastructures as ds
 
 
 @ray.remote

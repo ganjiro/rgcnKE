@@ -1,4 +1,4 @@
-from load_data import Data
+from Src.NoGE.load_data import Data
 import numpy as np
 import time
 import torch

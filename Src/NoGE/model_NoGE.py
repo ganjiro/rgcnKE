@@ -10,7 +10,7 @@ from tqdm.autonotebook import tqdm
 import torch.nn.functional as F
 import math
 import numpy as np
-from gnn_layers import *
+from Src.NoGE.gnn_layers import *
 
 '''@Dai Quoc Nguyen'''
 ''' QGNN encoder - customized DistMult decoder '''

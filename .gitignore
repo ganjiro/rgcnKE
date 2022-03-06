@@ -1,6 +1,6 @@
 /venv/
 /dataset/aifb/
 /dataset/FB15k/
-/Src/gnn/link_prediction/data/codex-l
-/Src/gnn/link_prediction/data/codex-m
-/Src/gnn/link_prediction/data/codex-s
+/Src/NoGE/data/codex-l
+/Src/NoGE/data/codex-m
+/Src/NoGE/data/codex-s

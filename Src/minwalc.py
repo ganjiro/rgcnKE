@@ -1,13 +1,15 @@
 # TODO incapsulare un po' il main e abbiamo finito
 # TODO salvare le predizioni
 
-import rdflib
-from sklearn.metrics import accuracy_score
-from comparing_model.node_classification_MINDWALC.datastructures import Graph
-from comparing_model.node_classification_MINDWALC.tree_builder import MINDWALCTree
-from Src.DataManagement.reformat_data import split_dataset, reformat_data
 import os
 import pandas as pd
+import configparser
+import rdflib
+from sklearn.metrics import accuracy_score
+from Src.MINDWALC.datastructures import Graph
+from Src.MINDWALC.tree_builder import MINDWALCTree
+from Src.DataManagement.reformat_data import split_dataset, reformat_data
+
 
 # labels = np.load("km4city/labels.npz")
 # labels = labels["indices"]
@@ -17,12 +19,16 @@ class MINDWALC_node_classification():
     def __init__(self, directory, dataset='km4city'):
         self.dataset = dataset
         self.directory = directory
-        self.random_split = False  # todo caricarlo da ini
         self.entity_col = 'nodes'
         self.label_col = 'label'
         self.label_predicates = [
             rdflib.URIRef('http://www.disit.org/km4city/schema#eventCategory')
         ]
+        config = configparser.ConfigParser()
+        config.read(r'{}\parameters\minwalc.ini'.format(self.directory.replace('dataset', "Src")))
+
+        self.random_split = config['config'].getboolean('random_split')
+
 
     def fit(self):
         if self.random_split or not os.path.exists(r"{}/{}/NodeClassification/MINDWALC/train.txt".format(self.directory, self.dataset)) :
@@ -46,17 +52,18 @@ class MINDWALC_node_classification():
         train_entities = [rdflib.URIRef(x) for x in train_data[self.entity_col]]
         train_labels = train_data[self.label_col]
 
-        test_entities = [rdflib.URIRef(x) for x in test_data[self.entity_col]]
-        test_labels = test_data[self.label_col]
+        self.test_entities = [rdflib.URIRef(x) for x in test_data[self.entity_col]]
+        self.test_labels = test_data[self.label_col]
 
         kg = Graph.rdflib_to_graph(g, label_predicates=self.label_predicates)
 
         self.model = MINDWALCTree()
 
         self.model.fit(kg, train_entities, train_labels)
+
     def predict(self):
-        preds = self.model.predict(kg, test_entities, test_labels)
-        print(accuracy_score(test_labels, preds))
+        preds = self.model.predict(self.model, self.test_entities, self.test_labels)
+        print(accuracy_score(self.test_labels, preds))
         return preds
 
     # print("Entità   Classe-Reale    Classe-Predetta")
@@ -65,5 +72,7 @@ class MINDWALC_node_classification():
     #           " " + str(preds[i]))
 
 if __name__=='__main__':
-    reformat_data(r"C:\Users\Girolamo\PycharmProjects\rgcnKE_sus\dataset","km4city",data_type="node")
+    #reformat_data(r"C:\Users\Girolamo\PycharmProjects\rgcnKE_sus\dataset","km4city",data_type="node")
     MINDWALC_node_classification(r"C:\Users\Girolamo\PycharmProjects\rgcnKE_sus\dataset").fit()
+
+

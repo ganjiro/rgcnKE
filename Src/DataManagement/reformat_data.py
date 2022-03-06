@@ -66,41 +66,41 @@ def fix_quotation_link(file_path, remove_brakets=False):
 
 
 def reformat_data_for_pykeen(directory, dataset='km4city'):
-    with open_secure("../../dataset/km4city/RawDowloaded/subgraph_data.tsv", 'r') as file:
+    with open_secure(r"{}/{}/RawDowloaded/subgraph_data.tsv".format(directory, dataset), 'r', encoding='ISO-8859-1') as file:
         filedata = file.read()
 
-    filedata = filedata.replace('"', 'XZXZXZX')
+    filedata = filedata.replace('"', 'XZXZX')
 
-    with open_secure("../dataset/km4city/RawDowloaded/subgraph_data_fix.tsv", 'w') as file:
+    with open_secure(r"{}/{}/RawDowloaded/subgraph_data_fix.tsv".format(directory, dataset), 'w', encoding='ISO-8859-1') as file:
         file.write(filedata)
 
-    df = pd.read_csv("../dataset/km4city/RawDowloaded/subgraph_data_fix.tsv", sep='\t', encoding='ISO-8859-1')
+    df = pd.read_csv(r"{}/{}/RawDowloaded/subgraph_data_fix.tsv".format(directory, dataset), sep='\t', encoding='ISO-8859-1')
 
     df = df.drop_duplicates()
     df = df.replace(r'[^0-9a-zA-Z ]', '', regex=True)
 
-    df.to_csv(r'{}/{}/km4city/linkPrediction/Pykeen/CompleteXXX.txt', index=False, sep='\t')
-    fix_quotation_link(r'{}/{}/km4city/linkPrediction/Pykeen/CompleteXXX.txt')
+    df.to_csv(r'{}/{}/linkPrediction/Pykeen/CompleteXXX.txt'.format(directory, dataset), index=False, sep='\t')
+    fix_quotation_link(r'{}/{}/linkPrediction/Pykeen/CompleteXXX.txt'.format(directory, dataset))
 
-    if os.path.exists(r'{}/{}/km4city/linkPrediction/Pykeen/CompleteXXX.txt'):
-        os.remove(r'{}/{}/km4city/linkPrediction/Pykeen/CompleteXXX.txt')
+    if os.path.exists(r'{}/{}/linkPrediction/Pykeen/CompleteXXX.txt'.format(directory, dataset)):
+        os.remove(r'{}/{}/linkPrediction/Pykeen/CompleteXXX.txt'.format(directory, dataset))
 
-    if os.path.exists(r'{}/{}/km4city/RawDowloaded/subgraph_data_fix.tsv'):
-        os.remove(r'{}/{}/RawDowloaded/subgraph_data_fix.tsv')
-
-
-def reformat_data_for_noge(directory, dataset='km4city'): #todo fix noge
+    if os.path.exists(r'{}/{}/RawDowloaded/subgraph_data_fix.tsv'.format(directory, dataset)):
+        os.remove(r'{}/{}/RawDowloaded/subgraph_data_fix.tsv'.format(directory, dataset))
 
 
-    with open_secure("../../dataset/km4city/RawDowloaded/subgraph_data.tsv", 'r') as file:
+def reformat_data_for_noge(directory, dataset='km4city'):
+
+
+    with open_secure(r"{}/{}/RawDowloaded/subgraph_data.tsv".format(directory, dataset), 'r', encoding='ISO-8859-1') as file:
         filedata = file.read()
 
-    filedata = filedata.replace('"', 'DIOCANE')
+    filedata = filedata.replace('"', 'XZXZX')
 
-    with open_secure("../dataset/subgraph_data_fix.tsv", 'w') as file:
+    with open_secure(r"{}/{}/RawDowloaded/subgraph_data_fix.tsv".format(directory, dataset), 'w', encoding='ISO-8859-1') as file:
         file.write(filedata)
 
-    df = pd.read_csv("../dataset/subgraph_data_fix.tsv", sep='\t', encoding='ISO-8859-1')
+    df = pd.read_csv(r"{}/{}/RawDowloaded/subgraph_data_fix.tsv".format(directory, dataset), sep='\t', encoding='ISO-8859-1')
 
     df = df.drop_duplicates()
     df = df.replace(r'[^0-9a-zA-Z ]', '', regex=True)
@@ -108,13 +108,13 @@ def reformat_data_for_noge(directory, dataset='km4city'): #todo fix noge
     train_val, test = train_test_split(df, test_size=0.2, shuffle=False)
     train, val = train_test_split(train_val, test_size=0.2, shuffle=False)
 
-    train.to_csv(r'{}/{}/dataset_for_link_prediction/classification/trainXXX.txt', index=False, sep='\t')
-    test.to_csv(r'{}/{}/dataset_for_link_prediction/classification/testXXX.txt', index=False, sep='\t')
-    val.to_csv(r'{}/{}/dataset_for_link_prediction/classification/validXXX.txt', index=False, sep='\t')
+    train.to_csv(r'{}/{}/linkPrediction/NOGE/trainXXX.txt'.format(directory, dataset), index=False, sep='\t')
+    test.to_csv(r'{}/{}/linkPrediction/NOGE/testXXX.txt'.format(directory, dataset), index=False, sep='\t')
+    val.to_csv(r'{}/{}/linkPrediction/NOGE/validXXX.txt'.format(directory, dataset), index=False, sep='\t')
 
-    fix_quotation_link(r'{}/{}/dataset_for_link_prediction/classification/testXXX.txt')
-    fix_quotation_link(r'{}/{}/dataset_for_link_prediction/classification/trainXXX.txt')
-    fix_quotation_link(r'{}/{}/dataset_for_link_prediction/classification/validXXX.txt')
+    fix_quotation_link(r'{}/{}/linkPrediction/NOGE/testXXX.txt'.format(directory, dataset))
+    fix_quotation_link(r'{}/{}/linkPrediction/NOGE/trainXXX.txt'.format(directory, dataset))
+    fix_quotation_link(r'{}/{}/linkPrediction/NOGE/validXXX.txt'.format(directory, dataset))
 
 
 def reformat_data_for_node_classification(directory, dataset='km4city'):
@@ -123,10 +123,10 @@ def reformat_data_for_node_classification(directory, dataset='km4city'):
 
     filedata = filedata.replace('"', '#%#')
 
-    with open_secure(r"{}/{}/RawDowloaded/subgraph_data.tsv".format(directory, dataset), 'w', encoding='ISO-8859-1') as file:
+    with open_secure(r"{}/{}/RawDowloaded/subgraph_data_fix.tsv".format(directory, dataset), 'w', encoding='ISO-8859-1') as file:
       file.write(filedata)
 
-    df = pd.read_csv(r"{}/{}/RawDowloaded/subgraph_data.tsv".format(directory, dataset), sep='\t', encoding='ISO-8859-1')
+    df = pd.read_csv(r"{}/{}/RawDowloaded/subgraph_data_fix.tsv".format(directory, dataset), sep='\t', encoding='ISO-8859-1')
 
     df = df.drop_duplicates()
     df1 = df.query('p != "<http://www.disit.org/km4city/schema#eventCategory>"')
@@ -181,9 +181,12 @@ def reformat_data_for_node_classification(directory, dataset='km4city'):
     output.close()
 
     copy_tree(r'{}/{}/NodeClassification/Rgcn/'.format(directory, dataset), r'{}/{}/NodeClassification/MINDWALC/'.format(directory, dataset))
-    filelist = [f for f in os.listdir(mydir) if f.endswith(".npz") or f.endswith(".npy")]
+    filelist = [f for f in os.listdir(os.path.join(r'{}/{}/NodeClassification/Rgcn/'.format(directory, dataset))) if f.endswith(".npz") or f.endswith(".npy")]
     for f in filelist:
         os.remove(os.path.join(r'{}/{}/NodeClassification/Rgcn/'.format(directory, dataset), f))
+
+    if os.path.exists(r"{}/{}/RawDowloaded/subgraph_data_fix.tsv".format(directory, dataset)):
+        os.remove(r"{}/{}/RawDowloaded/subgraph_data_fix.tsv".format(directory, dataset))
 
 
 def split_dataset(filename, test_size=0.2, node = True):
@@ -226,4 +229,4 @@ def reformat_data(directory, dataset='km4city', data_type="node"):
         raise Exception("Model not found")
 
 if __name__ == "__main__":
-    reformat_data(r"C:\Users\Girolamo\PycharmProjects\rgcnKE_sus\dataset", 'km4city')
+    reformat_data(r"C:\Users\Girolamo\PycharmProjects\rgcnKE_sus\dataset", 'km4city', data_type="pykeen")
