@@ -34,9 +34,9 @@ class NoGE_link_prediction():
                           eval_step=self.eval_step, eval_after=self.eval_after, variant=self.variant)
 
     def fit(self):
-        print("**************************************** start model")
+        print("************** Launching DQ-GNN fit... ************************")
         self.model.train_and_eval()
-        print("**************************************** end model\n\n\n")
+        print("************** ending ************************\n\n\n")
 
 
 

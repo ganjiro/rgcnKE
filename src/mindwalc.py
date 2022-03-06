@@ -29,7 +29,7 @@ class MINDWALC_node_classification():
         self.random_split = config['config'].getboolean('random_split')
 
     def fit(self):
-        print("**************************************** start model")
+        print("************** Launching Decision Tree fit... ************************")
 
 
         if self.random_split or not os.path.exists(
@@ -60,11 +60,11 @@ class MINDWALC_node_classification():
 
         kg = Graph.rdflib_to_graph(g, label_predicates=self.label_predicates)
 
-        self.model = MINDWALCTree()
+        self.model = MINDWALCTree(directory=self.directory)
 
         self.model.fit(kg, train_entities, train_labels)
 
-        print("**************************************** end model\n\n\n")
+        print("************** ending ************************\n\n\n")
 
     def predict(self):
         preds = self.model.predict(self.model, self.test_entities, self.test_labels)

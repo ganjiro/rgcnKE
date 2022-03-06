@@ -231,14 +231,17 @@ def to_utf8(filename_in):
 def reformat_data(directory, dataset='km4city', data_type="node"):
     to_utf8(r"{}/{}/RawDowloaded/subgraph_data.tsv".format(directory, dataset))
     if data_type.lower() == "node":
+        print("\nReformatting km4city for Node Classification...\n")
         reformat_data_for_node_classification(directory, dataset)
     elif data_type.lower() == "noge":
+        print("\nReformatting km4city for Link Prediction with DQ-GNN...\n")
         reformat_data_for_noge(directory, dataset)
     elif data_type.lower() == "pykeen":
+        print("\nReformatting km4city for Link Prediction with TransE...\n")
         reformat_data_for_pykeen(directory, dataset)
     else:
         raise Exception("Model not found")
+    print("Reformatting done\n")
 
-
-if __name__ == "__main__":
-    reformat_data(r"C:\Users\Girolamo\PycharmProjects\rgcnKE_sus\dataset", 'km4city', data_type="pykeen")
+# if __name__ == "__main__":
+#     reformat_data(r"C:\Users\Girolamo\PycharmProjects\rgcnKE_sus\dataset", 'km4city', data_type="pykeen")

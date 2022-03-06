@@ -1,11 +1,12 @@
 from collections import Counter
+from pathlib import Path
 
 import numpy as np
 import psutil
 import ray
 from scipy.stats import entropy
 from sklearn.base import ClassifierMixin, TransformerMixin, BaseEstimator
-
+import pandas as pd
 import src.MINDWALC.datastructures as ds
 
 
@@ -152,10 +153,11 @@ class MINDWALCTree(BaseEstimator, ClassifierMixin, MINDWALCMixin):
     # n_jobs=1
     def __init__(self, path_max_depth=8, min_samples_leaf=1,
                  progress=None, max_tree_depth=None, n_jobs=1,
-                 init=True):
+                 init=True, directory = None):
         super().__init__(path_max_depth, progress, n_jobs, init)
         self.min_samples_leaf = min_samples_leaf
         self.max_tree_depth = max_tree_depth
+        self.directory = directory
 
     def _stop_condition(self, neighborhoods, labels, curr_tree_depth):
         return (len(set(labels)) == 1
@@ -217,13 +219,31 @@ class MINDWALCTree(BaseEstimator, ClassifierMixin, MINDWALCMixin):
         # TODO SALVA STA STAMPA
         # print("Entità   Classe-Reale    Classe-Predetta")
         count = 0
+        # for inst in instances:
+        #     neighborhood = kg.extract_neighborhood(inst, d)
+        #     pred = self.tree_.evaluate(neighborhood)
+        #     # print(str(inst) + "  #  " + test_labes[count] + "  #  " + str(pred))
+        #     preds.append(pred)
+        #     count = count + 1
+        # print()
+
+        col = ["Entity", "True-Category", "Predicted-Category"]
+        df_res = pd.DataFrame(columns=col)
         for inst in instances:
             neighborhood = kg.extract_neighborhood(inst, d)
             pred = self.tree_.evaluate(neighborhood)
-            # print(str(inst) + "  #  " + test_labes[count] + "  #  " + str(pred))
+            df_res = df_res.append(
+                {"Entity": str(inst),
+                 "True-Category": test_labes[count],
+                 "Predicted-Category": str(pred)},
+                ignore_index=True)
             preds.append(pred)
             count = count + 1
-        print()
+
+        root = Path(self.directory).parent
+
+        df_res.to_csv(r'{}/node_classification_predictions/decision_tree_predictions.tsv'.format(root), index=False, sep='\t')
+
         return preds
 
 

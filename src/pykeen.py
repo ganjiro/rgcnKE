@@ -15,8 +15,6 @@ import configparser
 from pykeen.pipeline import pipeline
 from pykeen.triples import TriplesFactory
 
-from src.DataManagement.reformat_data import reformat_data
-
 
 class pykeen_link_prediction():
 
@@ -31,7 +29,7 @@ class pykeen_link_prediction():
         self.epochs = config.getint('config', 'epochs')
 
     def fit(self):
-        print("**************************************** start model")
+        print("************** Launching TransE fit... ************************")
         self.result = pipeline(
             training=self.training,
             testing=self.testing,
@@ -39,9 +37,7 @@ class pykeen_link_prediction():
             epochs=self.epochs,
         )
         self.result.save_to_directory('doctests/test_unstratified_transe')  # todo capire come fare
-        print("**************************************** end model\n\n\n")
-
-
+        print("************** ending ************************\n\n\n")
 
 # if __name__ == '__main__':
 #     reformat_data(r"C:\Users\Girolamo\PycharmProjects\rgcnKE_sus\dataset", "km4city", data_type="pykeen")

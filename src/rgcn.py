@@ -24,7 +24,7 @@ class RGCN_node_classification():
         self.num_bases = config.getint('config', 'num_bases')
 
     def fit(self):
-        print("**************************************** start model")
+        print("************** Launching rgcn fit... ************************")
 
         if self.random_split or not os.path.exists(
                 r"{}/{}/NodeClassification/RGCN/train.txt".format(self.directory, self.dataset)):
@@ -37,7 +37,7 @@ class RGCN_node_classification():
                            n_epochs=self.epochs, l2norm=self.l2norm,
                            lr=self.lr, num_bases=self.num_bases, directory=self.directory)
         self.model.fit()
-        print("**************************************** end model\n\n\n")
+        print("************** ending ************************\n\n\n")
 
 
     def predict(self):
