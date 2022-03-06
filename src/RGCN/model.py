@@ -1,12 +1,16 @@
 import time
+from pathlib import Path
+
 import dgl
 import numpy as np
-import torch
+import pandas as pd
+
 from src.RGCN.gnn_model import *
 
 
 class Model(nn.Module):
-    def __init__(self, data, h_dim, num_hidden_layers=1, num_bases=51, n_epochs=1000, lr=0.01, l2norm=0.00005):
+    def __init__(self, data, h_dim, num_hidden_layers=1, num_bases=51, n_epochs=1000, lr=0.01, l2norm=0.00005,
+                 directory=None):
         super(Model, self).__init__()
         self.data = data
         self.h_dim = h_dim
@@ -35,6 +39,7 @@ class Model(nn.Module):
         self.optimizer = torch.optim.Adam(self.RGCN.parameters(), lr=lr, weight_decay=l2norm)
 
         self._print_parameters()
+        self.directory = directory
 
     def prepare_graph(self):
         self.labels_dict = self.data.label_dict
@@ -133,11 +138,18 @@ class Model(nn.Module):
         # self.test_idx 9533 la classe predetta per ogni elemento del test
 
         # print(self.labels[self.test_idx[0]].item())
-        # TODO SALVA STA STAMPA
-        # print("Entità   Classe-Reale    Classe-Predetta")
-        # for i in range(len(self.test_idx)):
-        #     print("E" + str(self.test_idx[i]) + ":  " + str(self.labels_dict[self.labels[self.test_idx[i]].item()]) +
-        #           " " + str(self.labels_dict[torch.argmax(logits[self.test_idx[i]]).item()]))
+        col = ["Entity", "True-Category", "Predicted-Category"]
+        df_res = pd.DataFrame(columns=col)
+
+        for i in range(len(self.test_idx)):
+            df_res = df_res.append(
+                {"Entity": str(self.test_idx[i]),
+                 "True-Category": str(self.labels_dict[self.labels[self.test_idx[i]].item()]),
+                 "Predicted-Category": str(self.labels_dict[torch.argmax(logits[self.test_idx[i]]).item()])},
+                ignore_index=True)
+        root = Path(self.directory).parent
+
+        df_res.to_csv(r'{}/node_classification_predictions/rgcn_predictions.tsv'.format(root), index=False, sep='\t')
 
         # test_loss = F.cross_entropy(logits[self.test_idx], self.labels[self.test_idx].long())
         # test_acc = torch.sum(logits[self.test_idx].argmax(dim=1) == self.labels[self.test_idx]).item() / len(

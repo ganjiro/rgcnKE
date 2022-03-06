@@ -17,14 +17,14 @@ if __name__ == '__main__':
 
     rgcn = RGCN_node_classification(path_to_dataset)
     rgcn.fit()
-    rgcn.predict()  # TODO save output
-
-    dq_gnn = NoGE_link_prediction(path_to_dataset)
-    dq_gnn.fit()
-
-    decision_tree = MINDWALC_node_classification(path_to_dataset)
-    decision_tree.fit()
-    decision_tree.predict()  # TODO save output
-
-    transE = pykeen_link_prediction(path_to_dataset)
-    transE.fit()
+    rgcn.predict()
+    #
+    # dq_gnn = NoGE_link_prediction(path_to_dataset)
+    # dq_gnn.fit()
+    #
+    # decision_tree = MINDWALC_node_classification(path_to_dataset)
+    # decision_tree.fit()
+    # decision_tree.predict()  # TODO save output
+    #
+    # transE = pykeen_link_prediction(path_to_dataset)
+    # transE.fit()

@@ -35,7 +35,7 @@ class RGCN_node_classification():
 
         self.model = Model(data=self.data, h_dim=self.n_hidden, num_hidden_layers=self.num_hidden_layers,
                            n_epochs=self.epochs, l2norm=self.l2norm,
-                           lr=self.lr, num_bases=self.num_bases)
+                           lr=self.lr, num_bases=self.num_bases, directory=self.directory)
         self.model.fit()
         print("**************************************** end model\n\n\n")
 
