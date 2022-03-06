@@ -16,6 +16,7 @@ from src.MINDWALC.tree_builder import MINDWALCTree
 class MINDWALC_node_classification():
 
     def __init__(self, directory, dataset='km4city'):
+        self.kg = None
         self.dataset = dataset
         self.directory = directory
         self.entity_col = 'nodes'
@@ -64,10 +65,11 @@ class MINDWALC_node_classification():
 
         self.model.fit(kg, train_entities, train_labels)
 
+        self.kg = kg
         print("************** ending ************************\n\n\n")
 
     def predict(self):
-        preds = self.model.predict(self.model, self.test_entities, self.test_labels)
+        preds = self.model.predict(kg=self.kg, instances=self.test_entities, test_labes=self.test_labels)
         print(accuracy_score(self.test_labels, preds))
         return preds
 

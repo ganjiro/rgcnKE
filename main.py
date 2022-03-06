@@ -11,7 +11,7 @@ if __name__ == '__main__':
 
     # download_km4c(file_path=r"{}/km4city/RawDowloaded/subgraph_data.TSV".format(path_to_dataset), want_tsv=True)
 
-    # reformat_data(path_to_dataset, "km4city", data_type="node")  # per node classification
+    reformat_data(path_to_dataset, "km4city", data_type="node")  # per node classification
     # reformat_data(path_to_dataset, "km4city", data_type="noge")
     # reformat_data(path_to_dataset, "km4city", data_type="pykeen")
 
