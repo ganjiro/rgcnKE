@@ -121,6 +121,9 @@ def reformat_data_for_noge(directory, dataset='km4city'):
     fix_quotation_link(r'{}/{}/linkPrediction/NOGE/trainXXX.txt'.format(directory, dataset))
     fix_quotation_link(r'{}/{}/linkPrediction/NOGE/validXXX.txt'.format(directory, dataset))
 
+    if os.path.exists(r'{}/{}/RawDowloaded/subgraph_data_fix.tsv'.format(directory, dataset)):
+        os.remove(r'{}/{}/RawDowloaded/subgraph_data_fix.tsv'.format(directory, dataset))
+
 
 def reformat_data_for_node_classification(directory, dataset='km4city'):
     with open_secure(r"{}/{}/RawDowloaded/subgraph_data.tsv".format(directory, dataset), 'r',

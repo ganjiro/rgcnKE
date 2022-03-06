@@ -36,7 +36,7 @@ class pykeen_link_prediction():
             model=self.model,
             epochs=self.epochs,
         )
-        self.result.save_to_directory('doctests/test_unstratified_transe')  # todo capire come fare
+        self.result.save_to_directory('doctests/test_unstratified_transe')
         print("************** ending ************************\n\n\n")
 
 # if __name__ == '__main__':

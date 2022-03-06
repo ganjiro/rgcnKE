@@ -1,7 +1,7 @@
 /venv/
 /dataset/aifb/
 /dataset/FB15k/
-/Src/NoGE/data/codex-l
-/Src/NoGE/data/codex-m
-/Src/NoGE/data/codex-s
+/src/NoGE/data/codex-l
+/src/NoGE/data/codex-m
+/src/NoGE/data/codex-s
 /src/NoGE/data/
