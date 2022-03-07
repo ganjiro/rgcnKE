@@ -83,6 +83,7 @@ def reformat_data_for_pykeen(directory, dataset='km4city'):
     df = df.drop_duplicates()
     df = df.replace(r'[^0-9a-zA-Z ]', '', regex=True)
 
+    Path(r'{}/{}/linkPrediction/Pykeen/'.format(directory, dataset)).mkdir(parents=True, exist_ok=True)
     df.to_csv(r'{}/{}/linkPrediction/Pykeen/CompleteXXX.txt'.format(directory, dataset), index=False, sep='\t')
     fix_quotation_link(r'{}/{}/linkPrediction/Pykeen/CompleteXXX.txt'.format(directory, dataset))
 
@@ -113,6 +114,7 @@ def reformat_data_for_noge(directory, dataset='km4city'):
     train_val, test = train_test_split(df, test_size=0.2, shuffle=False)
     train, val = train_test_split(train_val, test_size=0.2, shuffle=False)
 
+    Path(r'{}/{}/linkPrediction/NOGE/'.format(directory, dataset)).mkdir(parents=True, exist_ok=True)
     train.to_csv(r'{}/{}/linkPrediction/NOGE/trainXXX.txt'.format(directory, dataset), index=False, sep='\t')
     test.to_csv(r'{}/{}/linkPrediction/NOGE/testXXX.txt'.format(directory, dataset), index=False, sep='\t')
     val.to_csv(r'{}/{}/linkPrediction/NOGE/validXXX.txt'.format(directory, dataset), index=False, sep='\t')
@@ -143,6 +145,7 @@ def reformat_data_for_node_classification(directory, dataset='km4city'):
     df1 = df.query('p != "<http://www.disit.org/km4city/schema#eventCategory>"')
     df2 = df.query('p == "<http://www.disit.org/km4city/schema#eventCategory>"')
 
+    Path(r'{}/{}/NodeClassification/Rgcn/'.format(directory, dataset)).mkdir(parents=True, exist_ok=True)
     df1.to_csv(r'{}/{}/NodeClassification/Rgcn/{}_stripped.nt'.format(directory, dataset, dataset), index=False,
                sep=' ')
 
@@ -232,7 +235,7 @@ def to_utf8(filename_in):
 
 
 def reformat_data(directory, dataset='km4city', data_type="node"):
-    to_utf8(r"{}/{}/RawDowloaded/subgraph_data.tsv".format(directory, dataset))
+    #to_utf8(r"{}/{}/RawDowloaded/subgraph_data.tsv".format(directory, dataset))
     if data_type.lower() == "node":
         print("\nReformatting km4city for Node Classification...\n")
         reformat_data_for_node_classification(directory, dataset)
