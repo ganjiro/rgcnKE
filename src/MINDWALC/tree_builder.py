@@ -148,9 +148,7 @@ class MINDWALCMixin():
 
 
 class MINDWALCTree(BaseEstimator, ClassifierMixin, MINDWALCMixin):
-    # xxx ATTENZIONE ho cambiato robe
-    # path_max_depth=8
-    # n_jobs=1
+
     def __init__(self, path_max_depth=8, min_samples_leaf=1,
                  progress=None, max_tree_depth=None, n_jobs=-1,
                  init=True, directory = None):
@@ -216,8 +214,6 @@ class MINDWALCTree(BaseEstimator, ClassifierMixin, MINDWALCMixin):
     def predict(self, kg, instances, test_labes):
         preds = []
         d = self.path_max_depth + 1
-        # TODO SALVA STA STAMPA
-        # print("Entità   Classe-Reale    Classe-Predetta")
         count = 0
         # for inst in instances:
         #     neighborhood = kg.extract_neighborhood(inst, d)

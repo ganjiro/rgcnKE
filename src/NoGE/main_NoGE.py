@@ -177,9 +177,9 @@ class NoGE:
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--dataset", type=str, default="FB15k-237", nargs="?",
-                        help="codex-s, codex-m, and codex-l")  # XXX change deafult (codex-s)
+                        help="codex-s, codex-m, and codex-l")
     parser.add_argument("--num_iterations", type=int, default=5, nargs="?",
-                        help="Number of iterations.")  # XXX prima era 3000
+                        help="Number of iterations.")
     parser.add_argument("--batch_size", type=int, default=1024, nargs="?", help="Batch size.")
     parser.add_argument("--lr", type=float, default=0.005, nargs="?", help="Learning rate.")
     parser.add_argument("--hidden_dim", type=int, default=256, nargs="?", help="")

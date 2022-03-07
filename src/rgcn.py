@@ -1,5 +1,3 @@
-# TODO cambiare EXXX con l'URI e abbiamo finito
-
 import configparser
 import os
 
@@ -47,8 +45,8 @@ class RGCN_node_classification():
         self.model.predict_single(entities_vector)
 
 
-if __name__ == '__main__':
-    # reformat_data(r"C:\Users\Girolamo\PycharmProjects\rgcnKE_sus\dataset", "km4city", data_type="node")
-    ciao = RGCN_node_classification(r"C:\Users\Girolamo\PycharmProjects\rgcnKE_sus\dataset")
-    ciao.fit()     #todo fix sto scjkf
-    ciao.predict()
+# if __name__ == '__main__':
+#     reformat_data(r"C:\Users\Girolamo\PycharmProjects\rgcnKE_sus\dataset", "km4city", data_type="node")
+#     RGCN_node_classification(r"C:\Users\Girolamo\PycharmProjects\rgcnKE_sus\dataset").fit()
+
+
