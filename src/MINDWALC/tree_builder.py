@@ -152,7 +152,7 @@ class MINDWALCTree(BaseEstimator, ClassifierMixin, MINDWALCMixin):
     # path_max_depth=8
     # n_jobs=1
     def __init__(self, path_max_depth=8, min_samples_leaf=1,
-                 progress=None, max_tree_depth=None, n_jobs=1,
+                 progress=None, max_tree_depth=None, n_jobs=-1,
                  init=True, directory = None):
         super().__init__(path_max_depth, progress, n_jobs, init)
         self.min_samples_leaf = min_samples_leaf

@@ -235,7 +235,7 @@ def to_utf8(filename_in):
 
 
 def reformat_data(directory, dataset='km4city', data_type="node"):
-    #to_utf8(r"{}/{}/RawDowloaded/subgraph_data.tsv".format(directory, dataset))
+
     if data_type.lower() == "node":
         print("\nReformatting km4city for Node Classification...\n")
         reformat_data_for_node_classification(directory, dataset)

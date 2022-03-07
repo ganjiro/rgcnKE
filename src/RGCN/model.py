@@ -10,7 +10,7 @@ from src.RGCN.gnn_model import *
 
 class Model(nn.Module):
     def __init__(self, data, h_dim, num_hidden_layers=1, num_bases=51, n_epochs=1000, lr=0.01, l2norm=0.00005,
-                 directory=None):
+                 directory=None, dataset=None):
         super(Model, self).__init__()
         self.data = data
         self.h_dim = h_dim
@@ -40,6 +40,7 @@ class Model(nn.Module):
 
         self._print_parameters()
         self.directory = directory
+        self.dataset = dataset
 
     def prepare_graph(self):
         self.labels_dict = self.data.label_dict
@@ -132,22 +133,26 @@ class Model(nn.Module):
 
     def predict(self):
         self.eval()
+        root = Path(self.directory).parent
         # print("labels", self.labels[:5])  # 60'000
         logits = self.RGCN.forward(self.graph)  # 60'000*26 per ogni classe
         # print("logits", sum(logits[0]))
         # self.test_idx 9533 la classe predetta per ogni elemento del test
 
         # print(self.labels[self.test_idx[0]].item())
+
+        df_events = pd.read_csv(r'{}/dataset/{}/nodeclassification/RGCN/train_index_ass.csv'.format(root, self.dataset))
+
         col = ["Entity", "True-Category", "Predicted-Category"]
         df_res = pd.DataFrame(columns=col)
 
         for i in range(len(self.test_idx)):
             df_res = df_res.append(
-                {"Entity": str(self.test_idx[i]),
+                {"Entity": df_events[df_events["id"]==self.test_idx[i]][["node"]].values[0][0],
                  "True-Category": str(self.labels_dict[self.labels[self.test_idx[i]].item()]),
                  "Predicted-Category": str(self.labels_dict[torch.argmax(logits[self.test_idx[i]]).item()])},
                 ignore_index=True)
-        root = Path(self.directory).parent
+
 
         df_res.to_csv(r'{}/node_classification_predictions/rgcn_predictions.tsv'.format(root), index=False, sep='\t')
 
@@ -165,6 +170,7 @@ class Model(nn.Module):
     def predict_single(self, entities_vector):
         if self.check_entities_vector(entities_vector):
             self.eval()
+
 
             logits = self.RGCN.forward(self.graph)  # 60'000*26 per ogni classe
 

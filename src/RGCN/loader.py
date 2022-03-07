@@ -226,6 +226,8 @@ class DatasetLoader(object):
 
             test_idx = []
             test_names = []
+            col = ["id", "node"]
+            df_res = pd.DataFrame(columns=col)
             for nod, lab in zip(labels_test_df[nodes_header].values,
                                 labels_test_df[label_header].values):
                 nod = np.compat.unicode(self.to_unicode(nod))
@@ -235,6 +237,10 @@ class DatasetLoader(object):
                     labels[labeled_nodes_idx[-1], label_idx] = 1
                     test_idx.append(nodes_u_dict[nod])
                     test_names.append(nod)
+                    df_res = df_res.append(
+                        {"id": nodes_u_dict[nod],
+                         "node": nod},
+                        ignore_index=True)
                 else:
                     print(u'Node not in dictionary, skipped: ',
                           nod.encode('utf-8', errors='replace'))
@@ -247,9 +253,10 @@ class DatasetLoader(object):
 
             np.save(train_idx_file, train_idx)
             np.save(test_idx_file, test_idx)
+            train_index_ass_file = os.path.join(dataset_path, 'train_index_ass.csv')
+            df_res.to_csv(train_index_ass_file, index=False)
 
-
-        return labels_out, num_node, edge_list, num_rel, labels, labeled_nodes_idx, train_idx, test_idx
+        return labels_out, num_node, edge_list, num_rel, labels, labeled_nodes_idx, train_idx, test_idx,
 
     def to_unicode(self, input):
         return str(input)

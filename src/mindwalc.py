@@ -26,7 +26,8 @@ class MINDWALC_node_classification():
         ]
         config = configparser.ConfigParser()
         config.read(r'{}\parameters\mindwalc.ini'.format(self.directory.replace('dataset', "src")))
-
+        self.path_max_depth = config.getint('config', 'path_max_depth')
+        self.min_samples_leaf = config.getint('config', 'min_samples_leaf')
         self.random_split = config['config'].getboolean('random_split')
 
     def fit(self):
@@ -61,7 +62,7 @@ class MINDWALC_node_classification():
 
         kg = Graph.rdflib_to_graph(g, label_predicates=self.label_predicates)
 
-        self.model = MINDWALCTree(directory=self.directory)
+        self.model = MINDWALCTree(directory=self.directory, path_max_depth=self.path_max_depth, min_samples_leaf=self.min_samples_leaf)
 
         self.model.fit(kg, train_entities, train_labels)
 
