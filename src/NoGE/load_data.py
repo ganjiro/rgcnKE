@@ -33,7 +33,6 @@ class Data:
     def get_entities(self, data):
         aa = []
         for x in data:
-            print(x)
             aa.append(x[2])
         entities = sorted(list(set([d[0] for d in data]+aa)))
         return entities

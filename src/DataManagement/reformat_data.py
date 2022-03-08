@@ -243,7 +243,7 @@ def reformat_data(directory, dataset='km4city', data_type="node"):
         print("\nReformatting km4city for Link Prediction with DQ-GNN...\n")
         reformat_data_for_noge(directory, dataset)
     elif data_type.lower() == "pykeen":
-        print("\nReformatting km4city for Link Prediction with TransE...\n")
+        print("\nReformatting km4city for Link Prediction with tuckER...\n")
         reformat_data_for_pykeen(directory, dataset)
     else:
         raise Exception("Model not found")

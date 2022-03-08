@@ -40,6 +40,6 @@ class NoGE_link_prediction():
 
 
 
-# if __name__ == '__main__':
-#     reformat_data(r"C:\Users\Girolamo\PycharmProjects\rgcnKE_sus\dataset", "km4city", data_type="Noge")
-#     NoGE_link_prediction(r"C:\Users\Girolamo\PycharmProjects\rgcnKE_sus\dataset").fit()
+if __name__ == '__main__':
+    #reformat_data(r"C:\Users\Girolamo\PycharmProjects\rgcnKE_sus\dataset", "km4city", data_type="Noge")
+    NoGE_link_prediction(r"C:\Users\Girolamo\PycharmProjects\rgcnKE_sus\dataset").fit()

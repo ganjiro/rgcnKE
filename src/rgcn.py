@@ -45,8 +45,8 @@ class RGCN_node_classification():
         self.model.predict_single(entities_vector)
 
 
-# if __name__ == '__main__':
-#     reformat_data(r"C:\Users\Girolamo\PycharmProjects\rgcnKE_sus\dataset", "km4city", data_type="node")
-#     RGCN_node_classification(r"C:\Users\Girolamo\PycharmProjects\rgcnKE_sus\dataset").fit()
+if __name__ == '__main__':
+    # reformat_data(r"C:\Users\Girolamo\PycharmProjects\rgcnKE_sus\dataset", "km4city", data_type="node")
+    RGCN_node_classification(r"C:\Users\Girolamo\PycharmProjects\rgcnKE_sus\dataset").fit()
 
 
