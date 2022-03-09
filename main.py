@@ -32,4 +32,4 @@ if __name__ == '__main__':
     # tuckER = pykeen_link_prediction(path_to_dataset)
     # tuckER.fit()
 
-    print("Time elaplesed ",end - start)
+    print("Time elaplesed ", end - start)
