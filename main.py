@@ -1,10 +1,6 @@
 import os
-from src.DataManagement.reformat_data import reformat_data
-from src.DataManagement.download_raw_dataset import download_km4c
-from src.mindwalc import MINDWALC_node_classification
-from src.noge import NoGE_link_prediction
+
 from src.rgcn import RGCN_node_classification
-from src.testpykeen import pykeen_link_prediction
 
 if __name__ == '__main__':
     path_to_dataset = r'{}\dataset'.format(os.getcwd())

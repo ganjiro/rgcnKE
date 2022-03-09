@@ -1,9 +1,8 @@
 import math
+
 import torch
-import torch.nn as nn
-import torch.nn.functional as F
-from torch.nn.parameter import Parameter
 from torch.nn.modules.module import Module
+from torch.nn.parameter import Parameter
 
 
 def make_quaternion_mul(kernel):
@@ -15,9 +14,10 @@ def make_quaternion_mul(kernel):
     i2 = torch.cat([i, r, -k, j], dim=0)  # 1, 0, 3, 2
     j2 = torch.cat([j, k, r, -i], dim=0)  # 2, 3, 0, 1
     k2 = torch.cat([k, -j, i, r], dim=0)  # 3, 2, 1, 0
-    hamilton = torch.cat([r2, i2, j2, k2], dim=1) # Concatenate 4 quaternion components for a faster implementation.
+    hamilton = torch.cat([r2, i2, j2, k2], dim=1)  # Concatenate 4 quaternion components for a faster implementation.
     assert kernel.size(1) == hamilton.size(1)
     return hamilton
+
 
 def dual_quaternion_mul(A, B, input):
     '''(A, B) * (C, D) = (A * C, A * D + B * C)'''
@@ -31,7 +31,10 @@ def dual_quaternion_mul(A, B, input):
     AD_plus_BC = AD + BC
     return torch.cat([AC, AD_plus_BC], dim=1)
 
+
 ''' Quaternion graph neural networks! QGNN layer! https://arxiv.org/abs/2008.05089 '''
+
+
 class QGNN_layer(Module):
     def __init__(self, in_features, out_features, act=torch.tanh):
         super(QGNN_layer, self).__init__()
@@ -50,13 +53,16 @@ class QGNN_layer(Module):
 
     def forward(self, input, adj):
         hamilton = make_quaternion_mul(self.weight)
-        support = torch.mm(input, hamilton)  # Hamilton product, quaternion multiplication! Concatenate 4 components of the quaternion input for a faster implementation.
+        support = torch.mm(input,
+                           hamilton)  # Hamilton product, quaternion multiplication! Concatenate 4 components of the quaternion input for a faster implementation.
         output = torch.spmm(adj, support)
         output = self.bn(output)
         return self.act(output)
 
 
 ''' Dual quaternion graph neural networks! '''
+
+
 class DQGNN_layer(Module):
     def __init__(self, in_features, out_features, act=torch.tanh):
         super(DQGNN_layer, self).__init__()
@@ -64,7 +70,7 @@ class DQGNN_layer(Module):
         self.out_features = out_features
         self.act = act
         #
-        self.A = Parameter(torch.FloatTensor(self.in_features // 8, self.out_features // 2)) # (A, B) = A + eB, e^2 = 0
+        self.A = Parameter(torch.FloatTensor(self.in_features // 8, self.out_features // 2))  # (A, B) = A + eB, e^2 = 0
         self.B = Parameter(torch.FloatTensor(self.in_features // 8, self.out_features // 2))
 
         self.reset_parameters()
@@ -81,9 +87,12 @@ class DQGNN_layer(Module):
         output = self.bn(output)
         return self.act(output)
 
+
 """ Simple GCN layer, similar to https://arxiv.org/abs/1609.02907 """
+
+
 class GraphConvolution(torch.nn.Module):
-    def __init__(self, in_features, out_features, act=torch.relu,  bias=False):
+    def __init__(self, in_features, out_features, act=torch.relu, bias=False):
         super(GraphConvolution, self).__init__()
         self.in_features = in_features
         self.out_features = out_features
@@ -110,4 +119,3 @@ class GraphConvolution(torch.nn.Module):
             output = output + self.bias
         output = self.bn(output)
         return self.act(output)
-

@@ -1,12 +1,8 @@
-from src.NoGE.load_data import Data
-import numpy as np
-import time
-import torch
-from collections import defaultdict
-import argparse
-import scipy.sparse as sp
 from collections import Counter
-import itertools
+
+import numpy as np
+import scipy.sparse as sp
+import torch
 from scipy import sparse
 
 torch.manual_seed(1337)
@@ -14,6 +10,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 if torch.cuda.is_available():
     torch.cuda.manual_seed_all(1337)
 np.random.seed(1337)
+
 
 def normalize_sparse(mx):
     """Row-normalize sparse matrix"""
@@ -24,6 +21,7 @@ def normalize_sparse(mx):
     mx = r_mat_inv.dot(mx)
     return mx
 
+
 def sparse_mx_to_torch_sparse_tensor(sparse_mx):
     """Convert a scipy sparse matrix to a torch sparse tensor."""
     sparse_mx = sparse_mx.tocoo().astype(np.float32)
@@ -32,6 +30,7 @@ def sparse_mx_to_torch_sparse_tensor(sparse_mx):
     values = torch.from_numpy(sparse_mx.data)
     shape = torch.Size(sparse_mx.shape)
     return torch.sparse.FloatTensor(indices, values, shape)
+
 
 # The new weighted Adj matrix
 def compute_weighted_adj_matrix(data, entity_idxs, relation_idxs):
@@ -83,8 +82,8 @@ def compute_weighted_adj_matrix(data, entity_idxs, relation_idxs):
         nw = sum_over_contexts[tok_word]
         Pw = nw / num_skipgrams
         #
-        edge_val = Pwc / Pw # for entity-entity edges
-        if tok_word > len(entity_idxs) or tok_context > len(entity_idxs): # for relation-entity edges
+        edge_val = Pwc / Pw  # for entity-entity edges
+        if tok_word > len(entity_idxs) or tok_context > len(entity_idxs):  # for relation-entity edges
             edge_val = Pwc
         row_indxs.append(tok_word)
         col_indxs.append(tok_context)
@@ -96,4 +95,3 @@ def compute_weighted_adj_matrix(data, entity_idxs, relation_idxs):
     adj = normalize_sparse(adj)
     adj = sparse_mx_to_torch_sparse_tensor(adj)
     return adj
-

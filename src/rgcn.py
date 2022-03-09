@@ -2,7 +2,7 @@ import configparser
 import os
 
 import src.RGCN.loader as ll
-from src.DataManagement.reformat_data import split_dataset, reformat_data
+from src.DataManagement.reformat_data import split_dataset
 from src.RGCN.model import *
 
 
@@ -37,7 +37,6 @@ class RGCN_node_classification():
         self.model.fit()
         print("************** ending ************************\n\n\n")
 
-
     def predict(self):
         self.model.predict()
 
@@ -48,5 +47,3 @@ class RGCN_node_classification():
 if __name__ == '__main__':
     # reformat_data(r"C:\Users\Girolamo\PycharmProjects\rgcnKE_sus\dataset", "km4city", data_type="node")
     RGCN_node_classification(r"C:\Users\Girolamo\PycharmProjects\rgcnKE_sus\dataset").fit()
-
-

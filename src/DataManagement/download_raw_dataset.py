@@ -1,5 +1,6 @@
-from SPARQLWrapper import SPARQLWrapper, JSON, TSV
 from pathlib import Path
+
+from SPARQLWrapper import SPARQLWrapper, JSON, TSV
 
 
 def open_secure(path, type):

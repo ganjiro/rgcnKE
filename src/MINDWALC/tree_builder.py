@@ -2,11 +2,12 @@ from collections import Counter
 from pathlib import Path
 
 import numpy as np
+import pandas as pd
 import psutil
 import ray
 from scipy.stats import entropy
 from sklearn.base import ClassifierMixin, TransformerMixin, BaseEstimator
-import pandas as pd
+
 import src.MINDWALC.datastructures as ds
 
 
@@ -151,7 +152,7 @@ class MINDWALCTree(BaseEstimator, ClassifierMixin, MINDWALCMixin):
 
     def __init__(self, path_max_depth=8, min_samples_leaf=1,
                  progress=None, max_tree_depth=None, n_jobs=-1,
-                 init=True, directory = None):
+                 init=True, directory=None):
         super().__init__(path_max_depth, progress, n_jobs, init)
         self.min_samples_leaf = min_samples_leaf
         self.max_tree_depth = max_tree_depth
@@ -238,7 +239,8 @@ class MINDWALCTree(BaseEstimator, ClassifierMixin, MINDWALCMixin):
 
         root = Path(self.directory).parent
 
-        df_res.to_csv(r'{}/node_classification_predictions/decision_tree_predictions.tsv'.format(root), index=False, sep='\t')
+        df_res.to_csv(r'{}/node_classification_predictions/decision_tree_predictions.tsv'.format(root), index=False,
+                      sep='\t')
 
         return preds
 

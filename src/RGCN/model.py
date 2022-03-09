@@ -148,11 +148,10 @@ class Model(nn.Module):
 
         for i in range(len(self.test_idx)):
             df_res = df_res.append(
-                {"Entity": df_events[df_events["id"]==self.test_idx[i]][["node"]].values[0][0],
+                {"Entity": df_events[df_events["id"] == self.test_idx[i]][["node"]].values[0][0],
                  "True-Category": str(self.labels_dict[self.labels[self.test_idx[i]].item()]),
                  "Predicted-Category": str(self.labels_dict[torch.argmax(logits[self.test_idx[i]]).item()])},
                 ignore_index=True)
-
 
         df_res.to_csv(r'{}/node_classification_predictions/rgcn_predictions.tsv'.format(root), index=False, sep='\t')
 
@@ -170,7 +169,6 @@ class Model(nn.Module):
     def predict_single(self, entities_vector):
         if self.check_entities_vector(entities_vector):
             self.eval()
-
 
             logits = self.RGCN.forward(self.graph)  # 60'000*26 per ogni classe
 

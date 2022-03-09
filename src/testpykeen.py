@@ -1,7 +1,8 @@
 import configparser
+
+from pykeen.losses import BCEWithLogitsLoss
 from pykeen.pipeline import pipeline
 from pykeen.triples import TriplesFactory
-from pykeen.losses import BCEWithLogitsLoss
 
 
 class pykeen_link_prediction():
@@ -25,13 +26,14 @@ class pykeen_link_prediction():
             model=self.model,
             epochs=self.epochs,
             loss=BCEWithLogitsLoss,
-            model_kwargs = dict(
+            model_kwargs=dict(
                 embedding_dim=self.embedding_dim,
             )
         )
         self.result.save_to_directory('doctests/test_unstratified_transe')
         print("************** ending ************************\n\n\n")
 
+
 if __name__ == '__main__':
-#     reformat_data(r"C:\Users\Girolamo\PycharmProjects\rgcnKE_sus\dataset", "km4city", data_type="pykeen")
-     pykeen_link_prediction(r"C:\Users\Girolamo\PycharmProjects\rgcnKE_sus\dataset").fit()
+    #     reformat_data(r"C:\Users\Girolamo\PycharmProjects\rgcnKE_sus\dataset", "km4city", data_type="pykeen")
+    pykeen_link_prediction(r"C:\Users\Girolamo\PycharmProjects\rgcnKE_sus\dataset").fit()

@@ -1,5 +1,5 @@
-from src.NoGE.utils_NoGE import *
 from src.NoGE.model_NoGE import *
+from src.NoGE.utils_NoGE import *
 
 torch.manual_seed(1337)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")

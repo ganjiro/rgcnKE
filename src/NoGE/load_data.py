@@ -1,6 +1,5 @@
-import numpy as np
-
 """ The file is taken from https://github.com/ibalazevic/TuckER"""
+
 
 class Data:
 
@@ -15,15 +14,15 @@ class Data:
         self.valid_relations = self.get_relations(self.valid_data)
         self.test_relations = self.get_relations(self.test_data)
         self.relations = self.train_relations + [i for i in self.valid_relations \
-                if i not in self.train_relations] + [i for i in self.test_relations \
-                if i not in self.train_relations]
+                                                 if i not in self.train_relations] + [i for i in self.test_relations \
+                                                                                      if i not in self.train_relations]
 
     def load_data(self, data_dir, data_type="train", reverse=False):
         with open("%s%s.txt" % (data_dir, data_type), "r") as f:
             data = f.read().strip().split("\n")
             data = [i.split() for i in data]
             if reverse:
-                data += [[i[2], i[1]+"_reverse", i[0]] for i in data]
+                data += [[i[2], i[1] + "_reverse", i[0]] for i in data]
         return data
 
     def get_relations(self, data):
@@ -34,5 +33,5 @@ class Data:
         aa = []
         for x in data:
             aa.append(x[2])
-        entities = sorted(list(set([d[0] for d in data]+aa)))
+        entities = sorted(list(set([d[0] for d in data] + aa)))
         return entities

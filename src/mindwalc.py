@@ -33,7 +33,6 @@ class MINDWALC_node_classification():
     def fit(self):
         print("************** Launching Decision Tree fit... ************************")
 
-
         if self.random_split or not os.path.exists(
                 r"{}/{}/NodeClassification/MINDWALC/train.txt".format(self.directory, self.dataset)):
             split_dataset(r"{}/{}/NodeClassification/MINDWALC/unsplitted.tsv".format(self.directory, self.dataset),
@@ -62,7 +61,8 @@ class MINDWALC_node_classification():
 
         kg = Graph.rdflib_to_graph(g, label_predicates=self.label_predicates)
 
-        self.model = MINDWALCTree(directory=self.directory, path_max_depth=self.path_max_depth, min_samples_leaf=self.min_samples_leaf)
+        self.model = MINDWALCTree(directory=self.directory, path_max_depth=self.path_max_depth,
+                                  min_samples_leaf=self.min_samples_leaf)
 
         self.model.fit(kg, train_entities, train_labels)
 
@@ -78,7 +78,6 @@ class MINDWALC_node_classification():
     # for i in range(len(preds)):
     #     print("E" + str(test_entities[i]) + ":  " + str(test_labels[i]) +
     #           " " + str(preds[i]))
-
 
 # if __name__ == '__main__':
 #     # reformat_data(r"C:\Users\Girolamo\PycharmProjects\rgcnKE_sus\dataset","km4city",data_type="node")
